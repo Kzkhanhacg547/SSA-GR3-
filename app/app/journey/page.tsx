@@ -47,7 +47,7 @@ export default async function JourneyPage() {
   return (
     <div className="space-y-6">
       <AppNav />
-      <PageTitle title="Japan Journey" subtitle="Unlock requirements are evaluated server-side. Progress is per user." />
+      <PageTitle title="Hành Trình Nhật Bản 🗾" subtitle="Chinh phục từng chặng Shinkansen từ Tokyo đến Hokkaido. Hoàn thành bài học, tích lũy XP để mở khoá danh thắng và nhận hộ chiếu đặc biệt." />
       <JourneyClient rows={rows} achievements={JSON.parse(JSON.stringify(achievements))} />
     </div>
   );

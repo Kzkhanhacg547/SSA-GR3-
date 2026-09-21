@@ -26,6 +26,13 @@ const PRIMARY_NAV: NavItem[] = [
 // Explore & Feature Sub-items grouped into "Khám Phá" dropdown
 const EXPLORE_NAV: NavItem[] = [
   {
+    href: "/app/sensei",
+    label: "AI Kaiwa Sensei",
+    icon: "🌸",
+    badge: "N3 Voice",
+    description: "Đàm thoại tiếng Nhật N3 với Aoi Sensei khẩu hình tự nhiên",
+  },
+  {
     href: "/app/journey",
     label: "Japan Journey",
     icon: "🗾",
@@ -42,7 +49,8 @@ const EXPLORE_NAV: NavItem[] = [
     href: "/app/leaderboard",
     label: "Bảng Xếp Hạng",
     icon: "🏆",
-    description: "Xếp hạng cao thủ & vinh danh tiến trình học tập",
+    badge: "Giải Đấu",
+    description: "Xếp hạng cao thủ & đối đầu Rival Bots trong tuần",
   },
   {
     href: "/app/learn",
@@ -97,22 +105,22 @@ export function AppNav() {
   return (
     <>
       {/* Top Header Navigation */}
-      <header className="sticky top-0 z-40 mb-6 w-full glass-panel border-b border-slate-200/80 dark:border-slate-800/80 bg-white/85 dark:bg-sumi-950/85 backdrop-blur-md transition-colors shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3">
+      <header className="sticky top-0 z-40 mb-6 w-full glass-panel border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-sumi-950/80 backdrop-blur-xl transition-colors shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
           {/* Brand Logo */}
           <Link
             href="/app"
             onClick={playClick}
             className="flex items-center gap-2.5 shrink-0 font-black text-lg tracking-tight hover:opacity-90 transition group"
           >
-            <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-sakura-600 via-rose-500 to-amber-500 flex items-center justify-center text-white shadow-md shadow-sakura-500/25 group-hover:scale-105 transition-transform">
-              <span className="text-base font-bold font-jp">日</span>
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sakura-600 via-rose-500 to-amber-500 flex items-center justify-center text-white shadow-md shadow-sakura-500/25 group-hover:scale-105 group-hover:rotate-3 transition-transform">
+              <span className="text-lg font-bold font-jp">日</span>
             </div>
             <div className="flex flex-col">
-              <span className="leading-tight text-slate-900 dark:text-white font-extrabold text-base">
+              <span className="leading-tight text-slate-900 dark:text-white font-black text-base tracking-tight">
                 Nihon Quest
               </span>
-              <span className="text-[10px] text-slate-500 font-medium tracking-wider uppercase">
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold tracking-wider uppercase">
                 Japanese Master
               </span>
             </div>
@@ -121,7 +129,7 @@ export function AppNav() {
           {/* Desktop Navigation Bar (5 Core Tabs + Smart Explore Dropdown) */}
           <nav
             aria-label="Primary navigation"
-            className="hidden md:flex items-center gap-1 bg-slate-100/90 dark:bg-sumi-900/90 p-1 rounded-2xl border border-slate-200/70 dark:border-slate-800/70"
+            className="hidden md:flex items-center gap-1 bg-slate-100/90 dark:bg-sumi-900/90 p-1.5 rounded-2xl border border-slate-200/70 dark:border-slate-800/70 shadow-inner"
           >
             {PRIMARY_NAV.map((item) => {
               const active = pathname === item.href;
@@ -131,16 +139,16 @@ export function AppNav() {
                   href={item.href}
                   onClick={playClick}
                   aria-current={active ? "page" : undefined}
-                  className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  className={`relative flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-150 ${
                     active
-                      ? "bg-white text-sakura-600 shadow-sm dark:bg-sumi-800 dark:text-sakura-400 font-black"
+                      ? "bg-white text-sakura-600 shadow-sm dark:bg-sumi-800 dark:text-sakura-400 font-black shadow-slate-200/50 dark:shadow-none"
                       : "text-slate-600 hover:text-slate-900 hover:bg-white/60 dark:text-slate-400 dark:hover:text-white dark:hover:bg-sumi-800/50"
                   }`}
                 >
                   <span className="text-sm">{item.icon}</span>
                   <span>{item.label}</span>
                   {item.badge && (
-                    <span className="text-[9px] font-black px-1.5 py-0.2 rounded-full bg-sakura-500 text-white leading-none">
+                    <span className="text-[9px] font-black px-1.5 py-0.2 rounded-full bg-sakura-500 text-white leading-none shadow-xs">
                       {item.badge}
                     </span>
                   )}
@@ -158,9 +166,9 @@ export function AppNav() {
                 }}
                 aria-expanded={dropdownOpen}
                 aria-haspopup="true"
-                className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`relative flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   isExploreActive || dropdownOpen
-                    ? "bg-sakura-50 text-sakura-600 dark:bg-sakura-950/50 dark:text-sakura-400 border border-sakura-200 dark:border-sakura-900"
+                    ? "bg-sakura-50 text-sakura-600 dark:bg-sakura-950/50 dark:text-sakura-400 border border-sakura-200/80 dark:border-sakura-900 font-black"
                     : "text-slate-600 hover:text-slate-900 hover:bg-white/60 dark:text-slate-400 dark:hover:text-white dark:hover:bg-sumi-800/50"
                 }`}
               >
@@ -176,7 +184,7 @@ export function AppNav() {
 
               {/* Floating Dropdown Menu */}
               {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-72 rounded-2xl bg-white dark:bg-sumi-900 border border-slate-200 dark:border-slate-800 p-2 shadow-2xl z-50 animate-in fade-in-50 zoom-in-95 duration-150">
+                <div className="absolute right-0 mt-2 w-72 rounded-3xl bg-white/95 dark:bg-sumi-900/95 backdrop-blur-xl border border-slate-200 dark:border-slate-800 p-2 shadow-2xl z-50 animate-in fade-in-50 zoom-in-95 duration-150">
                   <div className="px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800/80 mb-1">
                     Trung Tâm Khám Phá
                   </div>
@@ -191,13 +199,13 @@ export function AppNav() {
                             setDropdownOpen(false);
                             playClick();
                           }}
-                          className={`flex items-start gap-3 p-2 rounded-xl transition ${
+                          className={`flex items-start gap-3 p-2.5 rounded-2xl transition ${
                             active
                               ? "bg-sakura-50 text-sakura-700 dark:bg-sakura-950/60 dark:text-sakura-300 font-bold"
                               : "text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-sumi-800"
                           }`}
                         >
-                          <span className="text-xl shrink-0 p-1 rounded-lg bg-slate-100 dark:bg-sumi-800">
+                          <span className="text-xl shrink-0 p-1.5 rounded-xl bg-slate-100 dark:bg-sumi-800 shadow-xs">
                             {sub.icon}
                           </span>
                           <div className="flex-1 min-w-0">
@@ -230,10 +238,10 @@ export function AppNav() {
             <button
               onClick={toggleSound}
               aria-label={soundEnabled ? "Mute audio" : "Enable audio"}
-              className={`p-2 rounded-xl text-sm transition-all border ${
+              className={`p-2.5 rounded-2xl text-sm transition-all border ${
                 soundEnabled
                   ? "bg-amber-50 border-amber-200 text-amber-600 dark:bg-amber-950/40 dark:border-amber-900 dark:text-amber-300 shadow-sm"
-                  : "bg-slate-100 border-slate-200 text-slate-400 dark:bg-sumi-900 dark:border-slate-800"
+                  : "bg-slate-100 border-slate-200 text-slate-400 dark:bg-sumi-900 dark:border-slate-800 hover:bg-slate-200/70"
               }`}
               title={soundEnabled ? "Âm thanh: Bật" : "Âm thanh: Tắt"}
             >
@@ -244,7 +252,7 @@ export function AppNav() {
             <button
               onClick={toggleTheme}
               aria-label="Toggle dark mode"
-              className="p-2 rounded-xl text-sm border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:bg-sumi-900 dark:text-slate-200 dark:hover:bg-sumi-800 transition shadow-sm"
+              className="p-2.5 rounded-2xl text-sm border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:bg-sumi-900 dark:text-slate-200 dark:hover:bg-sumi-800 transition shadow-sm"
               title={theme === "dark" ? "Chuyển giao diện Sáng" : "Chuyển giao diện Tối"}
             >
               {theme === "dark" ? "🌙" : "☀️"}
@@ -254,7 +262,7 @@ export function AppNav() {
             <Link
               href="/app/profile"
               onClick={playClick}
-              className={`flex items-center justify-center w-9 h-9 rounded-xl border text-sm font-black transition shadow-sm ${
+              className={`flex items-center justify-center w-10 h-10 rounded-2xl border text-sm font-black transition shadow-sm ${
                 pathname === "/app/profile"
                   ? "border-sakura-500 bg-sakura-50 text-sakura-600 dark:bg-sakura-950/50 dark:text-sakura-400"
                   : "border-slate-200 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:bg-sumi-900 dark:text-slate-200"

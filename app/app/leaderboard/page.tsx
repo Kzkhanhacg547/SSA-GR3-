@@ -5,15 +5,16 @@ import { prisma } from "@/lib/prisma";
 import { AppNav } from "@/components/AppNav";
 import { PageTitle } from "@/components/ui";
 import { LeaderboardClient } from "./LeaderboardClient";
+import { buildEnrichedLeaderboard } from "@/lib/rivalBots";
 
-export const metadata = { title: "Bảng Xếp Hạng — Nihon Quest" };
+export const metadata = { title: "Bảng Xếp Hạng & Giải Đấu — Nihon Quest" };
 
 export default async function LeaderboardPage() {
   const session = await getServerSession(authOptions);
   const uid = (session?.user as { id?: string } | undefined)?.id;
   if (!uid) redirect("/login");
 
-  // Fetch all users with profile
+  // Fetch all real users with profile
   const allUsers = await prisma.user.findMany({
     select: {
       id: true,
@@ -39,43 +40,37 @@ export default async function LeaderboardPage() {
     weeklyXpMap.set(t.userId, (weeklyXpMap.get(t.userId) || 0) + t.amount);
   });
 
-  const allTimeFormatted = allUsers.map((u) => ({
+  const realUsersFormatted = allUsers.map((u) => ({
     id: u.id,
     name: u.name,
-    displayName: u.profile?.displayName || u.name,
-    avatar: u.profile?.avatar || null,
-    xp: u.totalXP,
+    totalXP: u.totalXP,
     level: u.level,
     currentStreak: u.currentStreak,
+    displayName: u.profile?.displayName || u.name,
+    avatar: u.profile?.avatar || null,
+    weeklyXp: weeklyXpMap.get(u.id) || 0,
   }));
 
-  const weeklyFormatted = allUsers
-    .map((u) => ({
-      id: u.id,
-      name: u.name,
-      displayName: u.profile?.displayName || u.name,
-      avatar: u.profile?.avatar || null,
-      xp: weeklyXpMap.get(u.id) || 0,
-      level: u.level,
-      currentStreak: u.currentStreak,
-    }))
-    .sort((a, b) => b.xp - a.xp);
-
-  const totalUsers = await prisma.user.count();
+  const { weeklyList, allTimeList, directRival } = buildEnrichedLeaderboard(
+    realUsersFormatted,
+    uid
+  );
 
   return (
     <div className="space-y-6 max-w-2xl mx-auto">
       <AppNav />
       <PageTitle
-        title="Bảng Xếp Hạng & Giải Đấu"
+        title="Bảng Xếp Hạng & Giải Đấu 🏆"
         subtitle="Thi đua học tập công bằng mỗi tuần. Càng kiên trì rèn luyện, thứ hạng càng thăng tiến！"
-        badge={`${totalUsers} học viên`}
+        badge={`${weeklyList.length} học viên tham gia`}
       />
       <LeaderboardClient
         currentUserId={uid}
-        weeklyUsers={weeklyFormatted}
-        allTimeUsers={allTimeFormatted}
+        weeklyUsers={weeklyList}
+        allTimeUsers={allTimeList}
+        directRival={directRival}
       />
     </div>
   );
 }
+

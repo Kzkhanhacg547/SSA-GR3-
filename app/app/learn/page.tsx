@@ -17,7 +17,7 @@ export default async function LearnPage() {
   return (
     <div className="space-y-6">
       <AppNav />
-      <PageTitle title="Kana Lab" subtitle="Real kana from the database. Practicing saves per-user review state." />
+      <PageTitle title="Kana Lab — Bảng Chữ Cái" subtitle="Luyện tập 46 ký tự Hiragana và Katakana kèm phát âm chuẩn bản xứ. Mỗi ký tự luyện xong được ghi nhớ theo thuật toán SRS." />
       <KanaLab kana={kana} practiced={Array.from(done)} />
     </div>
   );

@@ -18,9 +18,9 @@ export default async function ProfilePage() {
   return (
     <div className="space-y-6">
       <AppNav />
-      <PageTitle title="Profile and settings" subtitle="Saved per user in the real database." />
+      <PageTitle title="Hồ Sơ &amp; Cài Đặt" subtitle="Cá nhân hoá lộ trình học tập, mục tiêu JLPT và giao diện theo sở thích của bạn." />
       <Card>
-        <p className="text-sm text-slate-600 dark:text-slate-300">Signed in as</p>
+        <p className="text-sm text-slate-600 dark:text-slate-300">Đăng nhập với email</p>
         <p className="font-semibold">{user.email}</p>
       </Card>
       <ProfileForm

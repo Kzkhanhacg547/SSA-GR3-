@@ -1,17 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Card, Badge, Button } from "@/components/ui";
-
-interface LeaderboardUser {
-  id: string;
-  name: string | null;
-  displayName: string | null;
-  avatar: string | null;
-  xp: number;
-  level: number;
-  currentStreak: number;
-}
+import { type EnrichedLeaderboardUser, type DirectRivalInfo } from "@/lib/rivalBots";
 
 const RANK_ICONS = ["🥇", "🥈", "🥉"];
 const TIER_COLORS = [
@@ -30,10 +22,12 @@ export function LeaderboardClient({
   currentUserId,
   weeklyUsers,
   allTimeUsers,
+  directRival,
 }: {
   currentUserId: string;
-  weeklyUsers: LeaderboardUser[];
-  allTimeUsers: LeaderboardUser[];
+  weeklyUsers: EnrichedLeaderboardUser[];
+  allTimeUsers: EnrichedLeaderboardUser[];
+  directRival: DirectRivalInfo | null;
 }) {
   const [tab, setTab] = useState<"WEEKLY" | "ALL_TIME">("WEEKLY");
 
@@ -44,7 +38,7 @@ export function LeaderboardClient({
   return (
     <div className="space-y-6">
       {/* Tab Switcher */}
-      <div className="flex p-1 rounded-2xl bg-slate-100 dark:bg-sumi-900 border border-slate-200 dark:border-slate-800 max-w-sm mx-auto">
+      <div className="flex p-1.5 rounded-2xl bg-slate-100 dark:bg-sumi-900 border border-slate-200 dark:border-slate-800 max-w-sm mx-auto shadow-inner">
         <button
           onClick={() => setTab("WEEKLY")}
           className={`flex-1 py-2 rounded-xl text-xs font-black transition-all ${
@@ -67,27 +61,66 @@ export function LeaderboardClient({
         </button>
       </div>
 
+      {/* Direct Rival Challenge Banner (Only on Weekly League) */}
+      {tab === "WEEKLY" && directRival && (
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-rose-500/10 via-amber-500/10 to-indigo-500/10 dark:from-rose-950/40 dark:via-amber-950/30 dark:to-indigo-950/40 border-2 border-rose-300/80 dark:border-rose-900/80 p-5 shadow-md">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-start sm:items-center gap-3.5">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-500 to-amber-500 flex items-center justify-center text-2xl text-white shadow-md shadow-rose-500/30 shrink-0">
+                {directRival.bot.avatar || "⚔️"}
+              </div>
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-rose-500 text-white shadow-xs">
+                    ⚔️ ĐỐI THỦ TRỰC TIẾP
+                  </span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-bold">
+                    @{directRival.bot.name}
+                  </span>
+                </div>
+                <h4 className="font-black text-sm sm:text-base text-slate-900 dark:text-white">
+                  {directRival.message}
+                </h4>
+                {directRival.bot.quote && (
+                  <p className="text-xs text-slate-500 dark:text-slate-400 italic">
+                    &ldquo;{directRival.bot.quote}&rdquo;
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="shrink-0 flex items-center gap-2">
+              <Link href="/app/practice">
+                <Button variant="sakura" size="sm" className="font-black shadow-md shadow-sakura-500/25">
+                  Học bài vượt mặt 🚀
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Current User Position Banner */}
       {currentUser && (
-        <Card className="p-4 bg-gradient-to-r from-sakura-50 via-rose-50 to-amber-50 dark:from-sumi-900 dark:to-sumi-950 border-2 border-sakura-200 dark:border-sakura-900 shadow-sm">
+        <Card className="p-4 sm:p-5 bg-gradient-to-r from-sakura-50 via-rose-50 to-amber-50 dark:from-sumi-900 dark:to-sumi-950 border-2 border-sakura-200 dark:border-sakura-900 shadow-sm">
           <div className="flex items-center gap-4">
             <div className="relative">
               <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${getTier(currentUser.xp).color} flex items-center justify-center text-2xl shadow-lg`}>
                 {getTier(currentUser.xp).badge}
               </div>
-              <div className="absolute -top-1 -right-1 bg-sakura-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full">
+              <div className="absolute -top-1 -right-1 bg-sakura-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full shadow-xs">
                 #{currentUserRank}
               </div>
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
                 Vị trí của bạn {tab === "WEEKLY" ? "trong tuần" : "toàn thời gian"}
               </p>
-              <p className="font-black text-slate-900 dark:text-white text-base sm:text-lg">
+              <p className="font-black text-slate-900 dark:text-white text-base sm:text-lg truncate">
                 {currentUser.displayName || currentUser.name || "Bạn"}{" "}
                 <span className="text-sakura-600 dark:text-sakura-400">#{currentUserRank}</span>
               </p>
-              <div className="flex items-center gap-3 mt-0.5 text-xs text-slate-500">
+              <div className="flex items-center gap-3 mt-0.5 text-xs text-slate-500 flex-wrap font-semibold">
                 <span>⚡ {currentUser.xp.toLocaleString()} XP</span>
                 <span>🎯 Lv.{currentUser.level}</span>
                 <span>🔥 {currentUser.currentStreak} ngày</span>
@@ -103,17 +136,17 @@ export function LeaderboardClient({
           const rank = idx + 1;
           const isMe = user.id === currentUserId;
           const tier = getTier(user.xp);
-          const displayName = user.displayName || user.name || "Học Viên Ẩn Danh";
+          const displayName = user.displayName || user.name || "Học Viên";
 
           return (
             <Card
               key={user.id}
               className={`p-3.5 transition-all ${
                 isMe
-                  ? "border-sakura-400 dark:border-sakura-800 bg-sakura-50/50 dark:bg-sakura-950/20 shadow-sm"
+                  ? "border-2 border-sakura-400 dark:border-sakura-800 bg-sakura-50/60 dark:bg-sakura-950/30 shadow-sm scale-[1.01]"
                   : rank <= 3
-                  ? "border-amber-200 dark:border-amber-900/60 bg-amber-50/30 dark:bg-amber-950/10"
-                  : "border-slate-200 dark:border-slate-800"
+                  ? "border border-amber-200 dark:border-amber-900/60 bg-amber-50/30 dark:bg-amber-950/10"
+                  : "border border-slate-200 dark:border-slate-800"
               }`}
             >
               <div className="flex items-center gap-3">
@@ -128,7 +161,7 @@ export function LeaderboardClient({
 
                 {/* Avatar / Badge */}
                 <div
-                  className={`w-10 h-10 rounded-xl bg-gradient-to-br ${tier.color} flex items-center justify-center text-lg shadow-sm shrink-0`}
+                  className={`w-10 h-10 rounded-2xl bg-gradient-to-br ${tier.color} flex items-center justify-center text-lg shadow-sm shrink-0 font-black text-white`}
                 >
                   {user.avatar || tier.badge}
                 </div>
@@ -144,9 +177,14 @@ export function LeaderboardClient({
                       {tier.name}
                     </Badge>
                   </div>
-                  <div className="flex items-center gap-2 mt-0.5 text-xs text-slate-500">
+                  <div className="flex items-center gap-2.5 mt-0.5 text-xs text-slate-500 font-medium">
                     <span>🎯 Lv.{user.level}</span>
                     <span>🔥 {user.currentStreak}d</span>
+                    {user.quote && (
+                      <span className="hidden sm:inline text-slate-400 truncate max-w-[180px]">
+                        · &ldquo;{user.quote}&rdquo;
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -175,3 +213,4 @@ export function LeaderboardClient({
     </div>
   );
 }
+
