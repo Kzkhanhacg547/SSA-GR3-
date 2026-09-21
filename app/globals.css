@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 255 255 255;
+    --foreground: 15 23 42;
+  }
+
+  .dark {
+    --background: 9 13 22;
+    --foreground: 248 250 252;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased dark:bg-sumi-950 dark:text-slate-100 transition-colors duration-200 selection:bg-sakura-500 selection:text-white;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+.jp-text {
+  font-family: var(--font-jp), "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+  font-feature-settings: "palt";
+  letter-spacing: 0.04em;
+}
+
+/* Glassmorphism */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.dark .glass-panel {
+  background: rgba(15, 23 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(30, 41, 59, 0.8);
+}
+
+/* 3D Flip Card for SRS Review */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Japanese Pattern Subdued Background */
+.bg-seigaiha {
+  background-image: radial-gradient(circle at 100% 150%, #f43f6e10 24%, #0000 25%),
+                    radial-gradient(circle at 0 150%, #f43f6e10 24%, #0000 25%),
+                    radial-gradient(circle at 50% 100%, #6366f110 10%, #0000 11%);
+  background-size: 32px 16px;
+}
+
+.dark .bg-seigaiha {
+  background-image: radial-gradient(circle at 100% 150%, #f43f6e15 24%, #0000 25%),
+                    radial-gradient(circle at 0 150%, #f43f6e15 24%, #0000 25%),
+                    radial-gradient(circle at 50% 100%, #6366f115 10%, #0000 11%);
+  background-size: 32px 16px;
+}
+
+/* Hide scrollbars cleanly for horizontal tab bars */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

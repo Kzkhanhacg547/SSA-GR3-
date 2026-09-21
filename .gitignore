@@ -1,0 +1,10 @@
+Deno
+node_modules
+.next
+out
+prisma/dev.db*
+*.db*
+.env
+!.env.example
+__listing.txt
+*.tsbuildinfo
