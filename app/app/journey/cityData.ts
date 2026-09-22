@@ -100,19 +100,19 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
     stampJa: "東京駅・記念印",
     scenicPhotos: [
       {
-        url: "https://dulichviet.com.vn/images/bandidau/toa-thap-tokyo-ve-dep-day-long-lay-khi-ve-dem.jpg",
+        url: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1200&q=80",
         caption: "Tháp Tokyo rực sáng giữa đường chân trời đêm 🗼",
         location: "Minato-ku, Tokyo",
         description: "Ngọn tháp thép cao 332.9m xây dựng năm 1958, lấy cảm hứng từ tháp Eiffel với hai sắc đỏ trắng bảo hộ bầu trời thủ đô."
       },
       {
-        url: "https://namatravel.vn/images/upload/images/anh-blog/blog-nhat-ban/den-tho-asakusa-kannon-diem-den-linh-thieng-hang-dau-nhat-ban/den-tho-asakusa-kannon-diem-den-linh-thieng-hang-dau-nhat-ban-1.jpg",
+        url: "https://images.unsplash.com/photo-1528164344705-47542687000d?w=1200&q=80",
         caption: "Đền cổ Senso-ji Asakusa linh thiêng ⛩️",
         location: "Asakusa Taito-ku",
         description: "Ngôi đền Phật giáo cổ nhất Tokyo thành lập năm 645, nơi lưu giữ tinh hoa lễ hội Sanja Matsuri rộn rã."
       },
       {
-        url: "https://static.gltjp.com/glt/data/directory/12000/11036/20200609_085641_570ad4b2_w1920.webp",
+        url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200&q=80",
         caption: "Ngã tư Shibuya Crossing nhộn nhịp 🚶",
         location: "Shibuya Center Street",
         description: "Giao lộ người đi bộ đông nhất hành tinh, biểu tượng cho nhịp sống hiện đại không bao giờ ngủ."
@@ -129,7 +129,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         title: "Đèn Lồng Đỏ Lớn Cổng Sấm Kaminarimon",
         titleJa: "雷門大提灯 (Kaminarimon Ō-chōchin)",
         icon: "🏮",
-        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTv9Bmp6NTdCygmeyiGMBvuSWQj8juj16w4YILplgx6Bw&s=10",
+        imageUrl: "https://images.unsplash.com/photo-1528164344705-47542687000d?w=900&q=80",
         desc: "Chiếc đèn lồng đỏ khổng lồ nặng gần 700kg treo sừng sững tại cổng sấm đền Senso-ji, được chế tác thủ công từ tre và giấy washi Kyoto.",
         significance: "Biểu tượng bảo hộ bình an, xua đuổi tà khí và cầu nguyện mưa thuận gió hòa cho bách tính thời Edo."
       },
@@ -137,7 +137,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         title: "Kiếm Đạo Katana & Võ Sĩ Đạo Bushido",
         titleJa: "日本刀と武士道 (Nihontō & Bushidō)",
         icon: "⚔️",
-        imageUrl: "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRZ0fagnstRA4MAeFSFsKy_ttxsfmyhOXfog6-J8FxnS3A_-MJE",
+        imageUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=900&q=80",
         desc: "Nghệ thuật rèn kiếm bậc thầy với thép Tamahagane gấp hàng vạn lần, sở hữu đường vân sóng nước Hamon độc bản và độ sắc bén phi thường.",
         significance: "Linh hồn của giai cấp võ sĩ Samurai, biểu trưng cho Danh dự, Lòng quả cảm và Tinh thần Chính trực bất khuất."
       },
@@ -145,7 +145,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         title: "Văn Hóa Công Nghệ & Manga Akihabara",
         titleJa: "秋葉原オタク文化 (Akihabara Otaku)",
         icon: "🤖",
-        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR47L_aZUcsvjKoJoMH7IwpAMPdoDcZPzcBv_TC25WoJptdW4Jvq4U1HWaz&s=10",
+        imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900&q=80",
         desc: "Thánh địa truyện tranh manga, anime, thiết bị điện tử vi mạch và văn hóa Otaku lan tỏa ảnh hưởng toàn cầu.",
         significance: "Sức mạnh quyền lực mềm văn hóa đương đại đưa hình ảnh nước Nhật hiện đại chinh phục thế hệ trẻ năm châu."
       }
@@ -240,19 +240,19 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
     stampJa: "京都駅・記念印",
     scenicPhotos: [
       {
-        url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfZJ7-FltOAKfr8jQ_5XnLCjBxF8nV00RoJ6q_xwI4EpPT3Cl9YZnaCimW&s=10",
+        url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=1200&q=80",
         caption: "Chùa Vàng Kinkaku-ji rực rỡ bên hồ Gương ⛩️",
         location: "Kinkaku-ji, Kita-ku",
         description: "Ngôi chùa dát vàng ròng lung linh soi bóng mặt hồ tĩnh lặng, biểu tượng vĩnh cửu của văn hóa Muromachi."
       },
       {
-        url: "https://luhanhvietnam.com.vn/du-lich/vnt_upload/news/12_2020/tham-quan-den-FushimiInari-cong-Torii-.jpg",
+        url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1200&q=80",
         caption: "Đường hầm vạn cổng Torii Fushimi Inari 🦊",
         location: "Fushimi-ku, Kyoto",
         description: "Hơn 10,000 cổng Torii sơn màu đỏ chu sa son sắt xếp liền nhau dẫn lên đỉnh núi thiêng thờ Thần Nông Nghiệp Inari."
       },
       {
-        url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTodiRLQ2wlq45HDuSz2rwRYrxRq_5LySKHBn7oXLE0w&s",
+        url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&q=80",
         caption: "Rừng trúc Sagano Arashiyama xanh biếc 🎋",
         location: "Arashiyama, Ukyo-ku",
         description: "Lối mòn xuyên qua rừng tre cao vút xào xạc trong gió, một trong 100 âm thanh đặc trưng của nước Nhật."
