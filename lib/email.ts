@@ -6,7 +6,7 @@ export interface SendOtpEmailParams {
   type: "REGISTER" | "RESET_PASSWORD";
 }
 
-export async function sendOtpEmail({ to, code, type }: SendOtpEmailParams): Promise<{ success: boolean; devPreview?: boolean }> {
+export async function sendOtpEmail({ to, code, type }: SendOtpEmailParams): Promise<{ success: boolean; devPreview?: boolean; error?: string }> {
   const isRegister = type === "REGISTER";
   const title = isRegister ? "Xác nhận tạo tài khoản Nihon Quest 🌸" : "Mã xác nhận khôi phục mật khẩu 🔑";
   const actionText = isRegister ? "xác thực email để tạo tài khoản Nihon Quest" : "khôi phục mật khẩu tài khoản Nihon Quest của bạn";
@@ -55,11 +55,12 @@ export async function sendOtpEmail({ to, code, type }: SendOtpEmailParams): Prom
     </html>
   `;
 
+  const service = process.env.SMTP_SERVICE;
   const host = process.env.SMTP_HOST;
   const port = Number(process.env.SMTP_PORT || 587);
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
-  const from = process.env.SMTP_FROM || `"Nihon Quest" <noreply@nihonquest.local>`;
+  const from = process.env.SMTP_FROM || (user ? `"Nihon Quest 🌸" <${user}>` : `"Nihon Quest" <noreply@nihonquest.local>`);
 
   if (!user || !pass) {
     console.log(`\n================== [DEV EMAIL SIMULATOR] ==================`);
@@ -71,12 +72,19 @@ export async function sendOtpEmail({ to, code, type }: SendOtpEmailParams): Prom
   }
 
   try {
-    const transporter = nodemailer.createTransport({
-      host: host || "smtp.gmail.com",
-      port,
-      secure: port === 465,
-      auth: { user, pass },
-    });
+    const transporter = service === "gmail" || (!host && user.includes("@gmail.com"))
+      ? nodemailer.createTransport({
+          service: "gmail",
+          auth: { user, pass },
+          logger: true,
+          debug: true,
+        })
+      : nodemailer.createTransport({
+          host: host || "smtp.gmail.com",
+          port,
+          secure: port === 465,
+          auth: { user, pass },
+        });
 
     await transporter.sendMail({
       from,
@@ -85,11 +93,12 @@ export async function sendOtpEmail({ to, code, type }: SendOtpEmailParams): Prom
       html,
     });
 
+    console.log(`✅ [EMAIL SENT SUCCESSFULLY] to ${to}`);
     return { success: true };
-  } catch (error) {
-    console.error("Failed to send email via SMTP:", error);
-    // Fallback to dev log so system does not break completely
+  } catch (error: any) {
+    console.error("❌ Failed to send email via SMTP:", error);
+    // Fallback log
     console.log(`\n[FALLBACK OTP CODE FOR ${to}]: ${code}\n`);
-    return { success: false };
+    return { success: false, error: error?.message || "Lỗi gửi email qua máy chủ SMTP." };
   }
 }
