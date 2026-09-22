@@ -262,6 +262,15 @@ Dự án cung cấp các công cụ tiện lợi tích hợp sẵn với Prisma:
 | `npm run db:studio` | Mở giao diện đồ họa quản trị CSDL Prisma Studio |
 
 ---
+Hoặc 
+```bash
+cd /workspaces/SSA-GR3-
+npm install
+npx prisma generate
+npx prisma migrate deploy
+npm run db:seed   # nếu project cần seed dữ liệu ban đầu
+npm run dev
+```
 
 ## ❓ Xử Lý Sự Cố Thường Gặp
 
