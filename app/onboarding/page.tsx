@@ -49,16 +49,25 @@ export default function OnboardingPage() {
     }
 
     setLoading(true);
-    await fetch("/api/account", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...selections,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Ho_Chi_Minh",
-        onboardingCompleted: true,
-      }),
-    });
-    router.push("/app");
+    try {
+      const res = await fetch("/api/account", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...selections,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Ho_Chi_Minh",
+          onboardingCompleted: true,
+        }),
+      });
+      if (res.ok) {
+        router.push("/app");
+        router.refresh();
+      } else {
+        setLoading(false);
+      }
+    } catch {
+      setLoading(false);
+    }
   };
 
   return (
