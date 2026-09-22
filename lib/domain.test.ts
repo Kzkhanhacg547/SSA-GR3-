@@ -3,7 +3,7 @@ import { calculateLevel, xpForLevel } from "@/lib/level";
 import { updateSrs } from "@/lib/srs";
 import { updateStreak } from "@/lib/streak";
 import { scoreQuiz } from "@/lib/quiz";
-import { canUnlockJourney } from "@/lib/journey";
+import { canUnlockJourney, resolveJourneyStatus } from "@/lib/journey";
 
 describe("level", () => {
   it("starts at level 1", () => {
@@ -47,5 +47,23 @@ describe("quiz", () => {
 describe("journey", () => {
   it("unlocks first location", () => {
     expect(canUnlockJourney({ locationOrder: 0, requirementXp: 500, totalXP: 0, previousCompleted: false })).toBe(true);
+  });
+
+  it("opens the location once total XP meets the requirement", () => {
+    expect(resolveJourneyStatus({
+      currentStatus: "LOCKED",
+      locationOrder: 1,
+      requirementXp: 180,
+      totalXP: 320,
+      previousCompleted: false,
+    })).toBe("AVAILABLE");
+
+    expect(resolveJourneyStatus({
+      currentStatus: "LOCKED",
+      locationOrder: 2,
+      requirementXp: 380,
+      totalXP: 320,
+      previousCompleted: false,
+    })).toBe("LOCKED");
   });
 });

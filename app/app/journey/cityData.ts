@@ -91,7 +91,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         nameJa: "浅草天ぷら蕎麦",
         desc: "Mì kiều mạch soba nước dùng dashi thanh khiết ăn kèm tôm sú chiên tempura vàng ươm giòn rụm theo phong cách phố cổ Asakusa.",
         icon: "🍤",
-        imageUrl: "https://images.unsplash.com/photo-1581184953963-d15972933db1?w=700&q=80",
+        imageUrl: "https://rimage.gnst.jp/livejapan.com/public/article/detail/a/00/03/a0003474/img/basic/a0003474_main.jpg",
         taste: "Lớp vỏ tempura giòn tan ngấm nhẹ nước tương ngọt dịu dashi và hạt kiều mạch thơm mộc mạc.",
         orderingPhrase: "天ぷら蕎麦を温かいので (Tempura soba o atatakai no de - Cho tôi mì soba tôm nóng)"
       }

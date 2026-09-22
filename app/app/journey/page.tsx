@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { AppNav } from "@/components/AppNav";
 import { PageTitle } from "@/components/ui";
 import { JourneyClient } from "./JourneyClient";
-import { canUnlockJourney } from "@/lib/journey";
+import { canUnlockJourney, resolveJourneyStatus } from "@/lib/journey";
 
 export default async function JourneyPage() {
   const session = await getServerSession(authOptions);
@@ -17,13 +17,31 @@ export default async function JourneyPage() {
   const progress = await prisma.userJourneyProgress.findMany({ where: { userId: uid } });
   const byId = new Map(progress.map((p) => [p.locationId, p]));
 
-  // Ensure default progress rows exist (Tokyo AVAILABLE, others LOCKED)
+  // Sync journey status to the real XP gate so all pages use the same source of truth.
   for (const loc of locations) {
+    const currentStatus = byId.get(loc.id)?.status ?? "LOCKED";
+    const resolvedStatus = resolveJourneyStatus({
+      currentStatus,
+      locationOrder: loc.order,
+      requirementXp: loc.requirementXp,
+      totalXP: user.totalXP,
+      previousCompleted: true,
+    });
+
     if (!byId.has(loc.id)) {
       const created = await prisma.userJourneyProgress.create({
-        data: { userId: uid, locationId: loc.id, status: loc.order === 0 ? "AVAILABLE" : "LOCKED" },
+        data: { userId: uid, locationId: loc.id, status: resolvedStatus },
       });
       byId.set(loc.id, created);
+      continue;
+    }
+
+    if (byId.get(loc.id)?.status !== resolvedStatus && resolvedStatus !== "IN_PROGRESS" && resolvedStatus !== "COMPLETED") {
+      const updated = await prisma.userJourneyProgress.update({
+        where: { userId_locationId: { userId: uid, locationId: loc.id } },
+        data: { status: resolvedStatus },
+      });
+      byId.set(loc.id, updated);
     }
   }
 

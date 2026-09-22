@@ -6,6 +6,8 @@
   :root {
     --background: 255 255 255;
     --foreground: 15 23 42;
+    --font-sans: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-jp: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", "Noto Sans JP", sans-serif;
   }
 
   .dark {
@@ -19,6 +21,7 @@
 
   body {
     @apply bg-slate-50 text-slate-900 antialiased dark:bg-sumi-950 dark:text-slate-100 transition-colors duration-200 selection:bg-sakura-500 selection:text-white;
+    font-family: var(--font-sans);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -26,7 +29,7 @@
 }
 
 .jp-text {
-  font-family: var(--font-jp), "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+  font-family: var(--font-jp);
   font-feature-settings: "palt";
   letter-spacing: 0.04em;
 }

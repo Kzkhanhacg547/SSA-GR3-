@@ -183,18 +183,19 @@ Tạo file `.env` từ mẫu `.env.example`:
 
 > 💡 *Mặc định dự án dùng SQLite cục bộ (`DATABASE_URL="file:./dev.db"`), bạn không cần cài thêm MySQL hay PostgreSQL để chạy thử nghiệm.*
 
-### Bước 4: Chạy Migration CSDL & Seed Dữ Liệu Ban Đầu
-Khởi tạo cấu trúc bảng và nạp toàn bộ ngân hàng câu hỏi, từ vựng, ngữ pháp, bài học:
+### Bước 4: Chạy setup chuẩn cho repo mới hoặc khi database bị thiếu dữ liệu
+Script chuẩn này sẽ cài đặt dependency, tạo/đồng bộ database và seed dữ liệu mẫu một cách idempotent:
 ```bash
-npx prisma migrate dev --name init
-npm run db:seed
+npm run setup
 ```
-*Sau khi seed thành công, CSDL sẽ có sẵn hàng ngàn từ vựng, bảng chữ cái, bài tập từ N5 đến N3.*
+*Sau khi setup thành công, CSDL sẽ có sẵn hàng ngàn từ vựng, chữ cái, bài học và dữ liệu nền từ N5 đến N3.*
 
 ### Bước 5: Khởi chạy môi trường phát triển (Local Dev Server)
 ```bash
 npm run dev
 ```
+
+> Nếu bạn đã có repo cũ và muốn đảm bảo dữ liệu luôn đồng bộ khi dừng / chạy lại, hãy dùng `npm run dev` hoặc `npm run build`; chúng đều tự chạy `prisma migrate deploy` và `db:seed` trước khi khởi động, nên không bị thiếu dữ liệu sau khi restart.
 
 Mở trình duyệt và truy cập:
 👉 **[http://localhost:3000](http://localhost:3000)**
