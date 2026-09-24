@@ -19,7 +19,7 @@ interface LocationData {
 
 interface RowItem {
   location: LocationData;
-  progress: { status: string; isStamped?: boolean } | null;
+  progress: { status: string; progress?: number; isStamped?: boolean } | null;
   unlockable: boolean;
 }
 
@@ -131,6 +131,13 @@ export function JourneyClient({
     });
     return initial;
   });
+  const [cityProgressMap, setCityProgressMap] = useState<Record<string, number>>(() => {
+    const map: Record<string, number> = {};
+    rows.forEach((r) => {
+      map[r.location.id] = r.progress?.progress ?? (r.progress?.status === "COMPLETED" ? 100 : 0);
+    });
+    return map;
+  });
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
   const handleAction = async (locationId: string, action: "unlock" | "complete", locName: string) => {
@@ -153,6 +160,7 @@ export function JourneyClient({
 
       if (action === "complete") {
         playFanfare();
+        setCityProgressMap((prev) => ({ ...prev, [locationId]: 100 }));
         showToast({
           title: `Chinh phục thành công: ${locName}!`,
           description: "Chúc mừng bạn đã mở khóa địa danh và nhận thưởng XP!",
@@ -271,6 +279,7 @@ export function JourneyClient({
             const isInProgress = status === "IN_PROGRESS";
             const isLocked = !row.unlockable && !isCompleted && !isInProgress;
             const isStamped = stampedCities.has(loc.slug) || isCompleted;
+            const progressPct = isCompleted ? 100 : (cityProgressMap[loc.id] ?? row.progress?.progress ?? 0);
 
             return (
               <div
@@ -347,6 +356,28 @@ export function JourneyClient({
                   <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 mt-2 leading-relaxed">
                     {loc.description}
                   </p>
+
+                  {/* Exploration Progress Bar on Card */}
+                  {!isLocked && (
+                    <div className="mt-3.5 space-y-1 bg-slate-50 dark:bg-sumi-950/60 p-2 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="flex items-center justify-between text-[11px] font-bold">
+                        <span className="text-slate-500 dark:text-slate-400">Tiến độ khám phá:</span>
+                        <span className={progressPct >= 100 ? "text-emerald-600 dark:text-emerald-400 font-black" : "text-sakura-600 dark:text-sakura-400 font-bold"}>
+                          {progressPct}%
+                        </span>
+                      </div>
+                      <div className="w-full bg-slate-200 dark:bg-sumi-800 h-1.5 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-500 ${
+                            progressPct >= 100
+                              ? "bg-emerald-500"
+                              : "bg-gradient-to-r from-sakura-500 to-amber-500"
+                          }`}
+                          style={{ width: `${progressPct}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Bottom Info & Tour Button */}
@@ -433,6 +464,15 @@ export function JourneyClient({
           loadingAction={loadingId === selectedCity.row.location.id}
           isStamped={stampedCities.has(selectedCity.row.location.slug)}
           onStamp={() => handleStampEki(selectedCity.row.location.id, selectedCity.row.location.slug, selectedCity.row.location.name)}
+          locationId={selectedCity.row.location.id}
+          initialProgress={cityProgressMap[selectedCity.row.location.id] ?? selectedCity.row.progress?.progress ?? 0}
+          onProgressUpdate={(newPercent) => {
+            if (!selectedCity) return;
+            setCityProgressMap((prev) => ({
+              ...prev,
+              [selectedCity.row.location.id]: newPercent,
+            }));
+          }}
         />
       )}
 

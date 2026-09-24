@@ -62,12 +62,18 @@ export async function sendOtpEmail({ to, code, type }: SendOtpEmailParams): Prom
   const pass = process.env.SMTP_PASS;
   const from = process.env.SMTP_FROM || (user ? `"Nihon Quest 🌸" <${user}>` : `"Nihon Quest" <noreply@nihonquest.local>`);
 
+  // In test environment, skip real sending
+  if (process.env.NODE_ENV === "test") {
+    return { success: true, devPreview: true };
+  }
+
+  // If SMTP credentials are missing, log to console as fallback (dev simulator)
   if (!user || !pass) {
-    console.log(`\n================== [DEV EMAIL SIMULATOR] ==================`);
+    console.log(`\n================== [DEV EMAIL SIMULATOR - NO CREDENTIALS] ==================`);
     console.log(`📩 TO: ${to}`);
     console.log(`📌 TYPE: ${type}`);
     console.log(`🔑 OTP CODE: [ ${code} ]`);
-    console.log(`===========================================================\n`);
+    console.log(`=============================================================================\n`);
     return { success: true, devPreview: true };
   }
 

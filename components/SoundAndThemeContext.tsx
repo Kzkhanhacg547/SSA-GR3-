@@ -12,6 +12,12 @@ interface ToastItem {
   xp?: number;
 }
 
+export interface VoiceOption {
+  name: string;
+  lang: string;
+  voiceURI: string;
+}
+
 interface SoundAndThemeContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
@@ -21,6 +27,15 @@ interface SoundAndThemeContextType {
   playIncorrect: () => void;
   playClick: () => void;
   playFanfare: () => void;
+
+  // Global Text-to-Speech Settings
+  speechRate: number;
+  setSpeechRate: (rate: number) => void;
+  speechVoiceURI: string;
+  setSpeechVoiceURI: (uri: string) => void;
+  availableVoices: VoiceOption[];
+  speak: (text: string, customRate?: number) => void;
+
   toasts: ToastItem[];
   showToast: (toast: Omit<ToastItem, "id">) => void;
   removeToast: (id: string) => void;
@@ -33,7 +48,12 @@ export function SoundAndThemeProvider({ children }: { children: React.ReactNode 
   const [soundEnabled, setSoundEnabledState] = useState<boolean>(true);
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
-  // Initialize from localStorage
+  // Speech TTS State
+  const [speechRate, setSpeechRateState] = useState<number>(0.85);
+  const [speechVoiceURI, setSpeechVoiceURIState] = useState<string>("");
+  const [availableVoices, setAvailableVoices] = useState<VoiceOption[]>([]);
+
+  // Initialize from localStorage & load voices
   useEffect(() => {
     try {
       const storedTheme = localStorage.getItem("nq_theme") as Theme | null;
@@ -44,8 +64,57 @@ export function SoundAndThemeProvider({ children }: { children: React.ReactNode 
       if (storedSound !== null) {
         setSoundEnabledState(storedSound === "true");
       }
+      const storedRate = localStorage.getItem("nq_speech_rate");
+      if (storedRate) {
+        setSpeechRateState(parseFloat(storedRate) || 0.85);
+      }
+      const storedVoice = localStorage.getItem("nq_speech_voice");
+      if (storedVoice) {
+        setSpeechVoiceURIState(storedVoice);
+      }
     } catch {
       // Ignore
+    }
+
+    // Load Web Speech Voices
+    const updateVoices = () => {
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        const voices = window.speechSynthesis.getVoices();
+        const jaVoices = voices
+          .filter((v) => {
+            const lang = (v.lang || "").toLowerCase();
+            const name = (v.name || "").toLowerCase();
+            return (
+              lang.startsWith("ja") ||
+              lang.includes("jp") ||
+              name.includes("japanese") ||
+              name.includes("日本語") ||
+              name.includes("haruka") ||
+              name.includes("kyoko") ||
+              name.includes("otoya") ||
+              name.includes("keita")
+            );
+          })
+          .map((v) => ({
+            name: v.name,
+            lang: v.lang,
+            voiceURI: v.voiceURI,
+          }));
+
+        // If no strict Japanese match, list all voices as fallback
+        const finalVoices = jaVoices.length > 0 ? jaVoices : voices.slice(0, 15).map((v) => ({
+          name: v.name,
+          lang: v.lang,
+          voiceURI: v.voiceURI,
+        }));
+
+        setAvailableVoices(finalVoices);
+      }
+    };
+
+    updateVoices();
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.onvoiceschanged = updateVoices;
     }
   }, []);
 
@@ -66,7 +135,6 @@ export function SoundAndThemeProvider({ children }: { children: React.ReactNode 
     } else if (theme === "light") {
       applyLight();
     } else {
-      // System
       const media = window.matchMedia("(prefers-color-scheme: dark)");
       if (media.matches) applyDark();
       else applyLight();
@@ -94,7 +162,80 @@ export function SoundAndThemeProvider({ children }: { children: React.ReactNode 
     } catch {}
   };
 
-  // Web Audio Synthesizer (Instant, Zero Network Latency, Lightweight)
+  const setSpeechRate = (r: number) => {
+    setSpeechRateState(r);
+    try {
+      localStorage.setItem("nq_speech_rate", String(r));
+    } catch {}
+  };
+
+  const setSpeechVoiceURI = (uri: string) => {
+    setSpeechVoiceURIState(uri);
+    try {
+      localStorage.setItem("nq_speech_voice", uri);
+    } catch {}
+  };
+
+  // Global Speech Function with Speech Synthesis & Audio Fallback
+  const speak = useCallback(
+    (text: string, customRate?: number) => {
+      if (!text || typeof window === "undefined") return;
+      const cleanText = text.replace(/[\(\[\{].*?[\)\]\}]/g, "").trim();
+      if (!cleanText) return;
+
+      const playAudioFallback = (t: string) => {
+        try {
+          const encoded = encodeURIComponent(t.slice(0, 200));
+          const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=ja&client=tw-ob`;
+          const audio = new Audio(url);
+          audio.play().catch(() => {});
+        } catch {}
+      };
+
+      try {
+        if ("speechSynthesis" in window) {
+          window.speechSynthesis.cancel();
+          const allSystemVoices = window.speechSynthesis.getVoices();
+          const hasJaVoice = allSystemVoices.some(
+            (v) => v.lang.startsWith("ja") || v.lang.includes("JP") || v.lang.includes("ja")
+          );
+
+          if (hasJaVoice) {
+            const u = new SpeechSynthesisUtterance(cleanText);
+            u.lang = "ja-JP";
+            u.rate = customRate ?? speechRate;
+
+            let matchedVoice = null;
+            if (speechVoiceURI) {
+              matchedVoice = allSystemVoices.find(
+                (v) => v.voiceURI === speechVoiceURI || v.name === speechVoiceURI
+              );
+            }
+            if (!matchedVoice) {
+              matchedVoice = allSystemVoices.find(
+                (v) => v.lang.startsWith("ja") || v.lang.includes("JP") || v.lang.includes("ja")
+              );
+            }
+            if (matchedVoice) {
+              u.voice = matchedVoice;
+            }
+
+            u.onerror = () => {
+              playAudioFallback(cleanText);
+            };
+
+            window.speechSynthesis.speak(u);
+            return;
+          }
+        }
+      } catch {}
+
+      playAudioFallback(cleanText);
+    },
+    [speechRate, speechVoiceURI]
+  );
+
+  // Web Audio Synthesizer (Instant Chimes)
   const getAudioContext = useCallback(() => {
     if (typeof window === "undefined") return null;
     const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
@@ -108,7 +249,6 @@ export function SoundAndThemeProvider({ children }: { children: React.ReactNode 
       const ctx = getAudioContext();
       if (!ctx) return;
       const now = ctx.currentTime;
-      // Japanese Hirajoshi/Pentatonic chime: E5 (659Hz) -> G5 (784Hz) -> B5 (987Hz)
       const notes = [659.25, 783.99, 987.77];
       notes.forEach((freq, idx) => {
         const osc = ctx.createOscillator();
@@ -171,7 +311,7 @@ export function SoundAndThemeProvider({ children }: { children: React.ReactNode 
       const ctx = getAudioContext();
       if (!ctx) return;
       const now = ctx.currentTime;
-      const chord = [523.25, 659.25, 783.99, 1046.5]; // C Major
+      const chord = [523.25, 659.25, 783.99, 1046.5];
       chord.forEach((freq, idx) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
@@ -211,6 +351,12 @@ export function SoundAndThemeProvider({ children }: { children: React.ReactNode 
         playIncorrect,
         playClick,
         playFanfare,
+        speechRate,
+        setSpeechRate,
+        speechVoiceURI,
+        setSpeechVoiceURI,
+        availableVoices,
+        speak,
         toasts,
         showToast,
         removeToast,

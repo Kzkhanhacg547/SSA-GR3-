@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { NihonQuestLogo } from "@/components/NihonQuestLogo";
 
 function RegisteredNotice() {
   const params = useSearchParams();
@@ -140,15 +141,12 @@ export default function LoginPage() {
 
       <div className="w-full max-w-md relative z-10">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-gradient-to-br from-sakura-500 via-rose-500 to-amber-500 shadow-xl shadow-sakura-500/40 mb-4">
-            <span className="text-2xl font-black text-white">日</span>
-          </div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white">
-            Nihon Quest
-          </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
-            Hành trình chinh phục tiếng Nhật của bạn
+        <div className="text-center mb-8 flex flex-col items-center">
+          <Link href="/" className="inline-block mb-3 hover:scale-105 transition-transform">
+            <NihonQuestLogo size="lg" />
+          </Link>
+          <p className="text-slate-500 dark:text-slate-400 text-xs mt-1">
+            Hành trình chinh phục tiếng Nhật thông minh của bạn
           </p>
         </div>
 

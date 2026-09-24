@@ -1,402 +1,716 @@
-// Grammar N5 Seed Data — 20 core grammar points
+// Grammar N5 Seed Data — Full coverage of Minna No Nihongo I (Bài 1 - 25)
 export const grammarData = [
   {
-    title: "〜です (desu)",
-    level: "N5",
-    meaning: "Là... / Đây là... — Trợ động từ kính ngữ kết thúc câu khẳng định",
-    structure: "[Danh từ / Tính từ -i] + です",
-    commonMistakes: "Không dùng です sau động từ thông thường. Đừng nói「食べますです」— sai！Chỉ nói「食べます」。",
-    examples: [
-      { japanese: "私は学生です。", romaji: "Watashi wa gakusei desu.", meaning: "Tôi là học sinh." },
-      { japanese: "これはペンです。", romaji: "Kore wa pen desu.", meaning: "Đây là cây bút." },
-      { japanese: "天気はいいです。", romaji: "Tenki wa ii desu.", meaning: "Thời tiết tốt." },
-    ],
+    "title": "〜です (desu)",
+    "level": "N5",
+    "meaning": "Là... / Đây là... — Trợ động từ kính ngữ kết thúc câu khẳng định",
+    "structure": "[Danh từ / Tính từ -i] + です",
+    "commonMistakes": "Không dùng です sau động từ dạng ます. Đừng nói「食べますです」— chỉ nói「食べます」。",
+    "examples": [
+      {
+        "japanese": "私は学生です。",
+        "romaji": "Watashi wa gakusei desu.",
+        "meaning": "Tôi là học sinh/sinh viên."
+      },
+      {
+        "japanese": "これは日本のカメラです。",
+        "romaji": "Kore wa nihon no kamera desu.",
+        "meaning": "Đây là máy ảnh của Nhật Bản."
+      },
+      {
+        "japanese": "富士山は高いです。",
+        "romaji": "Fujisan wa takai desu.",
+        "meaning": "Núi Phú Sĩ thì cao."
+      }
+    ]
   },
   {
-    title: "〜ではありません / じゃないです",
-    level: "N5",
-    meaning: "Không phải là... — Phủ định lịch sự của です",
-    structure: "[Danh từ] + ではありません (trang trọng) / じゃないです (thường ngày)",
-    commonMistakes: "じゃないです là dạng thông dụng hơn. ではありません thường dùng trong văn viết hay tình huống formal.",
-    examples: [
-      { japanese: "私は先生ではありません。", romaji: "Watashi wa sensei dewa arimasen.", meaning: "Tôi không phải là giáo viên." },
-      { japanese: "これはほんじゃないです。", romaji: "Kore wa hon ja nai desu.", meaning: "Đây không phải là cuốn sách." },
-    ],
+    "title": "〜ではありません / じゃありません",
+    "level": "N5",
+    "meaning": "Không phải là... — Dạng phủ định lịch sự của です",
+    "structure": "[Danh từ] + ではありません / じゃありません",
+    "commonMistakes": "じゃありません hay dùng trong giao tiếp hội thoại hàng ngày, ではありません hay dùng trong văn viết hoặc tình huống trang trọng.",
+    "examples": [
+      {
+        "japanese": "私は医者ではありません。",
+        "romaji": "Watashi wa isha dewa arimasen.",
+        "meaning": "Tôi không phải là bác sĩ."
+      },
+      {
+        "japanese": "明日は日曜日じゃありません。",
+        "romaji": "Ashita wa nichiyoubi ja arimasen.",
+        "meaning": "Ngày mai không phải là Chủ nhật."
+      }
+    ]
   },
   {
-    title: "〜は (wa) — Trợ từ chủ đề",
-    level: "N5",
-    meaning: "Trợ từ đánh dấu chủ đề câu nói. Dịch: 'Về... thì / Còn... thì'",
-    structure: "[Chủ đề] + は + [Bình luận về chủ đề]",
-    commonMistakes: "は ≠ が. は đánh dấu chủ đề/bối cảnh (topic), が đánh dấu chủ ngữ thực sự (subject). Trong câu hỏi, thường dùng が để hỏi 'ai/cái gì'.",
-    examples: [
-      { japanese: "私は日本語を勉強しています。", romaji: "Watashi wa nihongo wo benkyou shite imasu.", meaning: "Tôi đang học tiếng Nhật." },
-      { japanese: "東京は大きいです。", romaji: "Tōkyō wa ōkii desu.", meaning: "Tokyo thì to lớn." },
-      { japanese: "コーヒーは飲みますが、お茶は飲みません。", romaji: "Koohii wa nomimasu ga, ocha wa nomimasen.", meaning: "Cà phê thì uống, nhưng trà thì không uống." },
-    ],
+    "title": "〜は (wa) — Trợ từ chủ đề",
+    "level": "N5",
+    "meaning": "Đánh dấu chủ đề câu nói (Về... thì / Còn... thì)",
+    "structure": "[Chủ đề] + は + [Vị ngữ]",
+    "commonMistakes": "Phát âm là /wa/ dù viết bằng chữ cái 'は' (ha).",
+    "examples": [
+      {
+        "japanese": "田中さんは日本人です。",
+        "romaji": "Tanaka-san wa nihonjin desu.",
+        "meaning": "Anh Tanaka là người Nhật."
+      },
+      {
+        "japanese": "私の趣味は読書です。",
+        "romaji": "Watashi no shumi wa dokusho desu.",
+        "meaning": "Sở thích của tôi là đọc sách."
+      }
+    ]
   },
   {
-    title: "〜が (ga) — Trợ từ chủ ngữ",
-    level: "N5",
-    meaning: "Trợ từ đánh dấu chủ ngữ câu — ai/cái gì thực sự thực hiện hành động",
-    structure: "[Chủ ngữ] + が + [Vị ngữ]",
-    commonMistakes: "Dùng が sau từ hỏi (誰/何/どれ), sau câu phụ (before が/けど), và khi muốn nhấn mạnh chủ ngữ.",
-    examples: [
-      { japanese: "誰が来ましたか？", romaji: "Dare ga kimashita ka?", meaning: "Ai đã đến?" },
-      { japanese: "猫が魚を食べています。", romaji: "Neko ga sakana wo tabete imasu.", meaning: "Con mèo đang ăn cá." },
-      { japanese: "日本語が好きです。", romaji: "Nihongo ga suki desu.", meaning: "Tôi thích tiếng Nhật. (が với tính từ cảm xúc)", },
-    ],
+    "title": "〜も (mo) — Trợ từ 'Cũng'",
+    "level": "N5",
+    "meaning": "Biểu thị sự đồng nhất hoặc thêm vào (Cũng là...)",
+    "structure": "[Danh từ] + も + [Vị ngữ]",
+    "commonMistakes": "Khi dùng も thì thay thế luôn cho trợ từ は và を, không ghép thành 'はも' hay 'をも'.",
+    "examples": [
+      {
+        "japanese": "私もベトナム人です。",
+        "romaji": "Watashi mo betonamujin desu.",
+        "meaning": "Tôi cũng là người Việt Nam."
+      },
+      {
+        "japanese": "マイクさんも学生です。",
+        "romaji": "Maiku-san mo gakusei desu.",
+        "meaning": "Mike cũng là học sinh."
+      }
+    ]
   },
   {
-    title: "〜を (wo) — Trợ từ tân ngữ trực tiếp",
-    level: "N5",
-    meaning: "Đánh dấu tân ngữ trực tiếp (direct object) — đối tượng bị tác động bởi hành động",
-    structure: "[Tân ngữ] + を + [Động từ chuyển tiếp]",
-    commonMistakes: "Chỉ dùng với động từ chuyển tiếp (có tân ngữ). Không dùng với động từ vô tiếp (như 行く, 来る, いる).",
-    examples: [
-      { japanese: "パンを食べます。", romaji: "Pan wo tabemasu.", meaning: "Tôi ăn bánh mì." },
-      { japanese: "音楽を聞きます。", romaji: "Ongaku wo kikimasu.", meaning: "Tôi nghe nhạc." },
-      { japanese: "日本語を勉強しています。", romaji: "Nihongo wo benkyou shite imasu.", meaning: "Tôi đang học tiếng Nhật." },
-    ],
+    "title": "〜の (no) — Trợ từ sở hữu & liên kết",
+    "level": "N5",
+    "meaning": "Của / Thuộc về — Nối hai danh từ N1 の N2 (N2 của N1 / N2 thuộc N1)",
+    "structure": "[Danh từ 1] + の + [Danh từ 2]",
+    "commonMistakes": "Trong tiếng Nhật, danh từ lớn/chủ sở hữu đứng trước, danh từ nhỏ/vật thuộc quyền đứng sau.",
+    "examples": [
+      {
+        "japanese": "これは私の本です。",
+        "romaji": "Kore wa watashi no hon desu.",
+        "meaning": "Đây là cuốn sách của tôi."
+      },
+      {
+        "japanese": "東京大学の学生です。",
+        "romaji": "Toukyou daigaku no gakusei desu.",
+        "meaning": "Là sinh viên của Đại học Tokyo."
+      }
+    ]
   },
   {
-    title: "〜に (ni) — Trợ từ đích / thời gian",
-    level: "N5",
-    meaning: "Đích đến, nơi tồn tại, hoặc thời điểm cụ thể. Đa năng nhất trong các trợ từ!",
-    structure: "[Địa điểm/Thời gian] + に + [Động từ]",
-    commonMistakes: "に vs で: に dùng cho đích đến và tồn tại (います/あります). で dùng cho nơi diễn ra hành động. 学校に行く (đến trường) vs 学校で勉強する (học ở trường).",
-    examples: [
-      { japanese: "学校に行きます。", romaji: "Gakkō ni ikimasu.", meaning: "Tôi đi đến trường." },
-      { japanese: "机の上に本があります。", romaji: "Tsukue no ue ni hon ga arimasu.", meaning: "Có sách ở trên bàn." },
-      { japanese: "七時に起きます。", romaji: "Shichi-ji ni okimasu.", meaning: "Tôi thức dậy lúc 7 giờ." },
-    ],
+    "title": "これ / それ / あれ (kore / sore / are)",
+    "level": "N5",
+    "meaning": "Đại từ chỉ định đồ vật: Cái này (gần người nói), cái đó (gần người nghe), cái kia (xa cả hai)",
+    "structure": "[これ / それ / あれ] + は + [Danh từ] + です",
+    "commonMistakes": "これ/それ/あれ đứng độc lập làm đại từ. Không viết「これ本」— phải là「この本」.",
+    "examples": [
+      {
+        "japanese": "これは何ですか？",
+        "romaji": "Kore wa nan desu ka?",
+        "meaning": "Cái này là cái gì vậy?"
+      },
+      {
+        "japanese": "それは辞書です。",
+        "romaji": "Sore wa jisho desu.",
+        "meaning": "Đó là cuốn từ điển."
+      },
+      {
+        "japanese": "あれは私の傘です。",
+        "romaji": "Are wa watashi no kasa desu.",
+        "meaning": "Cái kia là chiếc ô của tôi."
+      }
+    ]
   },
   {
-    title: "〜で (de) — Trợ từ địa điểm hành động / phương tiện",
-    level: "N5",
-    meaning: "Nơi diễn ra hành động, phương tiện/công cụ được dùng, nguyên nhân",
-    structure: "[Địa điểm/Phương tiện] + で + [Hành động]",
-    commonMistakes: "で vs に: で = nơi hành động xảy ra. に = nơi đến/nơi tồn tại.",
-    examples: [
-      { japanese: "図書館で勉強します。", romaji: "Toshokan de benkyou shimasu.", meaning: "Tôi học ở thư viện." },
-      { japanese: "電車で会社に行きます。", romaji: "Densha de kaisha ni ikimasu.", meaning: "Tôi đi làm bằng tàu điện." },
-      { japanese: "日本語で話してください。", romaji: "Nihongo de hanashite kudasai.", meaning: "Hãy nói bằng tiếng Nhật." },
-    ],
+    "title": "この / その / あの + N",
+    "level": "N5",
+    "meaning": "Bổ nghĩa cho danh từ: Cái N này / Cái N đó / Cái N kia",
+    "structure": "[この / その / あの] + [Danh từ] + は ...",
+    "commonMistakes": "Bắt buộc phải có danh từ theo ngay sau (この + N).",
+    "examples": [
+      {
+        "japanese": "この時計はいくらですか？",
+        "romaji": "Kono tokei wa ikura desu ka?",
+        "meaning": "Chiếc đồng hồ này giá bao nhiêu tiền?"
+      },
+      {
+        "japanese": "あの人は誰ですか？",
+        "romaji": "Ano hito wa dare desu ka?",
+        "meaning": "Người kia là ai vậy?"
+      }
+    ]
   },
   {
-    title: "〜てください (te kudasai)",
-    level: "N5",
-    meaning: "Làm ơn hãy... — Yêu cầu lịch sự",
-    structure: "[Te-form của động từ] + ください",
-    commonMistakes: "Đây là câu yêu cầu lịch sự, không phải mệnh lệnh thô. Với cấp trên, thêm していただけませんか？ lịch sự hơn.",
-    examples: [
-      { japanese: "ゆっくり話してください。", romaji: "Yukkuri hanashite kudasai.", meaning: "Làm ơn nói chậm thôi." },
-      { japanese: "ここに名前を書いてください。", romaji: "Koko ni namae wo kaite kudasai.", meaning: "Làm ơn viết tên ở đây." },
-      { japanese: "ちょっと待ってください。", romaji: "Chotto matte kudasai.", meaning: "Làm ơn đợi một chút." },
-    ],
+    "title": "ここ / そこ / あそこ / どこ",
+    "level": "N5",
+    "meaning": "Đại từ chỉ địa điểm: Chỗ này, chỗ đó, chỗ đằng kia, ở đâu",
+    "structure": "[ここ / そこ / あそこ / どこ] + は + [Danh từ địa điểm] + です",
+    "commonMistakes": "Lịch sự hơn dùng こちら, そちら, あちら, どちら.",
+    "examples": [
+      {
+        "japanese": "ここは教室です。",
+        "romaji": "Koko wa kyoushitsu desu.",
+        "meaning": "Đây là phòng học."
+      },
+      {
+        "japanese": "お手洗いはどこですか？",
+        "romaji": "Otearai wa doko desu ka?",
+        "meaning": "Nhà vệ sinh ở đâu ạ?"
+      }
+    ]
   },
   {
-    title: "〜ています (te imasu)",
-    level: "N5",
-    meaning: "Đang... (tiếp diễn) / Là trạng thái hiện tại (kết quả của hành động đã xảy ra)",
-    structure: "[Te-form] + います",
-    commonMistakes: "います có 2 nghĩa: (1) đang làm gì đó [hành động tiếp diễn], (2) ở trạng thái nào đó [kết quả]. 結婚しています = đang ở trạng thái đã kết hôn (không phải 'đang kết hôn').",
-    examples: [
-      { japanese: "今、本を読んでいます。", romaji: "Ima, hon wo yonde imasu.", meaning: "Bây giờ tôi đang đọc sách." },
-      { japanese: "結婚しています。", romaji: "Kekkon shite imasu.", meaning: "Tôi đã (đang) kết hôn." },
-      { japanese: "田中さんはどこにいますか？— 図書館にいます。", romaji: "Tanaka-san wa doko ni imasu ka? — Toshokan ni imasu.", meaning: "Anh Tanaka đang ở đâu? — Ở thư viện." },
-    ],
+    "title": "〜時〜分 / 〜から〜まで (Thời gian)",
+    "level": "N5",
+    "meaning": "... giờ ... phút / Từ ... đến ...",
+    "structure": "[Thời gian] + から + [Thời gian] + まで",
+    "commonMistakes": "Chú ý phát âm giờ đặc biệt: 4 giờ (よじ), 9 giờ (くじ), 7 giờ (しちじ). Phút: 1분 (いっぷん), 3분 (さんぷん), 6분 (ろっぷん), 8분 (はっぷん), 10분 (じゅっぷん).",
+    "examples": [
+      {
+        "japanese": "今、午前10時30分です。",
+        "romaji": "Ima, gozen juu-ji sanjuppun desu.",
+        "meaning": "Bây giờ là 10 giờ 30 phút sáng."
+      },
+      {
+        "japanese": "銀行は9時から3時までです。",
+        "romaji": "Ginkou wa 9-ji kara 3-ji made desu.",
+        "meaning": "Ngân hàng mở cửa từ 9 giờ đến 3 giờ."
+      }
+    ]
   },
   {
-    title: "〜たいです (tai desu)",
-    level: "N5",
-    meaning: "Tôi muốn... — Diễn đạt mong muốn của người nói",
-    structure: "[V-stem (masu-form bỏ ます)] + たいです",
-    commonMistakes: "Chỉ dùng cho ngôi thứ nhất (tôi muốn). Không dùng để nói 'anh ấy muốn'. Với người khác: 〜たがっています.",
-    examples: [
-      { japanese: "日本へ行きたいです。", romaji: "Nihon e ikitai desu.", meaning: "Tôi muốn đến Nhật." },
-      { japanese: "寿司が食べたいです。", romaji: "Sushi ga tabetai desu.", meaning: "Tôi muốn ăn sushi." },
-      { japanese: "日本語が上手になりたいです。", romaji: "Nihongo ga jōzu ni naritai desu.", meaning: "Tôi muốn trở nên giỏi tiếng Nhật." },
-    ],
+    "title": "Động từ các thì: 〜ます / 〜ません / 〜ました / 〜ませんでした",
+    "level": "N5",
+    "meaning": "Khẳng định, phủ định, quá khứ khẳng định, quá khứ phủ định dạng lịch sự",
+    "structure": "[V-ます] -> ません / ました / ませんでした",
+    "commonMistakes": "Động từ đuôi ます luôn ở cuối câu vị ngữ.",
+    "examples": [
+      {
+        "japanese": "毎朝6時に起きます。",
+        "romaji": "Maiasa 6-ji ni okimasu.",
+        "meaning": "Mỗi sáng tôi thức dậy lúc 6 giờ."
+      },
+      {
+        "japanese": "昨日は勉強しませんでした。",
+        "romaji": "Kinou wa benkyou shimasen deshita.",
+        "meaning": "Hôm qua tôi đã không học bài."
+      }
+    ]
   },
   {
-    title: "〜てもいいですか？ (te mo ii desu ka)",
-    level: "N5",
-    meaning: "Tôi có thể...không? — Xin phép làm gì đó",
-    structure: "[Te-form] + もいいですか？",
-    commonMistakes: "Trả lời đồng ý: はい、どうぞ / ええ、もちろん. Từ chối lịch sự: ちょっと... (rồi dừng lại, hàm ý không).",
-    examples: [
-      { japanese: "ここに座ってもいいですか？", romaji: "Koko ni suwatte mo ii desu ka?", meaning: "Tôi có thể ngồi đây không?" },
-      { japanese: "写真を撮ってもいいですか？", romaji: "Shashin wo totte mo ii desu ka?", meaning: "Tôi có thể chụp ảnh không?" },
-      { japanese: "トイレを使ってもいいですか？", romaji: "Toire wo tsukatte mo ii desu ka?", meaning: "Tôi có thể dùng nhà vệ sinh không?" },
-    ],
+    "title": "〜へ 行きます / 来ます / 帰ります (へ - Phương hướng)",
+    "level": "N5",
+    "meaning": "Đi / Đến / Về đâu đó — Trợ từ へ đánh dấu hướng di chuyển",
+    "structure": "[Địa điểm] + へ (hoặc に) + [行きます / 来ます / 帰ります]",
+    "commonMistakes": "Chữ へ phát âm là /e/ khi làm trợ từ chỉ phương hướng.",
+    "examples": [
+      {
+        "japanese": "来週、日本へ行きます。",
+        "romaji": "Raishuu, Nihon e ikimasu.",
+        "meaning": "Tuần sau tôi sẽ đi Nhật Bản."
+      },
+      {
+        "japanese": "一緒にうちへ帰りましょう。",
+        "romaji": "Issho ni uchi e kaerimashou.",
+        "meaning": "Cùng nhau về nhà nhé."
+      }
+    ]
   },
   {
-    title: "〜てはいけません (te wa ikemasen)",
-    level: "N5",
-    meaning: "Không được phép... — Cấm chỉ, quy định",
-    structure: "[Te-form] + はいけません",
-    commonMistakes: "Mạnh hơn 〜ないでください. Dùng trong quy tắc, luật lệ, quy định. Không dùng với người thân thân thiết (quá cứng nhắc).",
-    examples: [
-      { japanese: "ここでたばこを吸ってはいけません。", romaji: "Koko de tabako wo sutte wa ikemasen.", meaning: "Không được hút thuốc ở đây." },
-      { japanese: "試験中に辞書を使ってはいけません。", romaji: "Shiken-chū ni jisho wo tsukatte wa ikemasen.", meaning: "Trong khi thi không được dùng từ điển." },
-    ],
+    "title": "〜で (Phương tiện giao thông / Công cụ)",
+    "level": "N5",
+    "meaning": "Bằng (phương tiện, công cụ, ngôn ngữ)",
+    "structure": "[Phương tiện / Dụng cụ] + で + [Động từ]",
+    "commonMistakes": "Đi bộ thì dùng「歩いて (aruite)」, không thêm で:「歩いて行きます」.",
+    "examples": [
+      {
+        "japanese": "新幹線で京都へ行きます。",
+        "romaji": "Shinkansen de Kyouto e ikimasu.",
+        "meaning": "Tôi đi đến Kyoto bằng tàu Shinkansen."
+      },
+      {
+        "japanese": "箸でご飯を食べます。",
+        "romaji": "Hashi de gohan o tabemasu.",
+        "meaning": "Tôi ăn cơm bằng đũa."
+      }
+    ]
   },
   {
-    title: "〜から (kara) — Nguyên nhân",
-    level: "N5",
-    meaning: "Vì..., Nên... — Diễn đạt nguyên nhân/lý do",
-    structure: "[Nguyên nhân] + から + [Kết quả]",
-    commonMistakes: "から (nguyên nhân) vs ので (lý do lịch sự). ので nghe lịch sự và nhẹ nhàng hơn から, thường dùng khi xin phép hay giải thích với cấp trên.",
-    examples: [
-      { japanese: "雨が降っているから、傘を持って行きます。", romaji: "Ame ga futte iru kara, kasa wo motte ikimasu.", meaning: "Vì trời mưa nên tôi mang ô theo." },
-      { japanese: "日本語が好きだから、毎日勉強します。", romaji: "Nihongo ga suki da kara, mainichi benkyou shimasu.", meaning: "Vì thích tiếng Nhật nên tôi học mỗi ngày." },
-    ],
+    "title": "〜を (wo) — Trợ từ tân ngữ trực tiếp",
+    "level": "N5",
+    "meaning": "Tác động hành động lên đối tượng (Ăn cái gì, uống cái gì, đọc cái gì)",
+    "structure": "[Tân ngữ] + を + [Động từ tha động từ]",
+    "commonMistakes": "Phát âm là /o/. Không dùng を với động từ di chuyển hoặc trạng thái tồn tại.",
+    "examples": [
+      {
+        "japanese": "パンと卵を食べます。",
+        "romaji": "Pan to tamago o tabemasu.",
+        "meaning": "Tôi ăn bánh mì và trứng."
+      },
+      {
+        "japanese": "日本語のニュースを読みます。",
+        "romaji": "Nihongo no nyuusu o yomimasu.",
+        "meaning": "Tôi đọc tin tức tiếng Nhật."
+      }
+    ]
   },
   {
-    title: "〜より〜のほうが (yori ~ no hou ga)",
-    level: "N5",
-    meaning: "... hơn ... — So sánh hơn kém",
-    structure: "[A] より [B] のほうが [Tính từ] です",
-    commonMistakes: "Nhớ: B nằm ở vị trí 'hơn'. AよりBのほうが好き = thích B hơn A. Dễ nhầm thứ tự!",
-    examples: [
-      { japanese: "東京より大阪のほうが好きです。", romaji: "Tōkyō yori Ōsaka no hō ga suki desu.", meaning: "Tôi thích Osaka hơn Tokyo." },
-      { japanese: "バスより電車のほうが速いです。", romaji: "Basu yori densha no hō ga hayai desu.", meaning: "Tàu điện nhanh hơn xe buýt." },
-      { japanese: "AとBとどちらのほうが好きですか？", romaji: "A to B to dochira no hō ga suki desu ka?", meaning: "Giữa A và B, bạn thích cái nào hơn?" },
-    ],
+    "title": "〜で (Địa điểm diễn ra hành động)",
+    "level": "N5",
+    "meaning": "Ở, tại nơi chốn thực hiện hành động",
+    "structure": "[Địa điểm] + で + [Hành động]",
+    "commonMistakes": "Khác với に (nơi tồn tại arimasu/imasu), で dùng khi có hoạt động diễn ra.",
+    "examples": [
+      {
+        "japanese": "図書館で本を読みます。",
+        "romaji": "Toshokan de hon o yomimasu.",
+        "meaning": "Tôi đọc sách ở thư viện."
+      },
+      {
+        "japanese": "駅の前で友達を待ちます。",
+        "romaji": "Eki no mae de tomodachi o machimasu.",
+        "meaning": "Tôi đợi bạn ở trước cửa ga."
+      }
+    ]
   },
   {
-    title: "〜ましょう (mashou) — Đề nghị cùng làm",
-    level: "N5",
-    meaning: "Hãy cùng... / Chúng ta cùng... — Lời mời/đề nghị làm cùng nhau",
-    structure: "[V-stem] + ましょう",
-    commonMistakes: "ましょう mạnh hơn ませんか (nhẹ nhàng, hỏi ý kiến). ましょう gần như đã quyết định, ませんか chỉ là gợi ý.",
-    examples: [
-      { japanese: "一緒に昼ごはんを食べましょう！", romaji: "Issho ni hirugohan wo tabemashou!", meaning: "Hãy cùng ăn trưa đi！" },
-      { japanese: "行きましょう！", romaji: "Ikimashou!", meaning: "Đi thôi！" },
-      { japanese: "始めましょうか？", romaji: "Hajimemashou ka?", meaning: "Chúng ta bắt đầu nhé?" },
-    ],
+    "title": "〜ませんか / 〜ましょう (Rủ rê & Đề nghị)",
+    "level": "N5",
+    "meaning": "Cùng làm gì với tôi nhé? / Cùng làm thôi nào!",
+    "structure": "[V-bỏ ます] + ませんか (lời mời lịch sự) / ましょう (lời kêu gọi cùng làm)",
+    "commonMistakes": "ませんか thể hiện sự tôn trọng, hỏi ý kiến đối phương. ましょう có tính chủ động kêu gọi.",
+    "examples": [
+      {
+        "japanese": "一緒にお茶を飲みませんか？",
+        "romaji": "Issho ni ocha o nomimasen ka?",
+        "meaning": "Cùng đi uống trà với tôi không?"
+      },
+      {
+        "japanese": "ええ、飲みましょう！",
+        "romaji": "Ee, nomimashou!",
+        "meaning": "Vâng, cùng uống thôi nào!"
+      }
+    ]
   },
   {
-    title: "〜ませんか (masen ka) — Mời/Gợi ý lịch sự",
-    level: "N5",
-    meaning: "Bạn có muốn... không? — Lời mời lịch sự",
-    structure: "[V-stem] + ませんか",
-    commonMistakes: "Lịch sự và nhẹ nhàng hơn ましょう. Người được hỏi hoàn toàn có quyền từ chối mà không thấy ngại.",
-    examples: [
-      { japanese: "一緒に映画を見ませんか？", romaji: "Issho ni eiga wo mimasen ka?", meaning: "Bạn có muốn cùng xem phim không?" },
-      { japanese: "お茶でも飲みませんか？", romaji: "Ocha demo nomimasen ka?", meaning: "Uống trà gì đó không?" },
-    ],
+    "title": "〜を あげます / もらいます (Tặng / Nhận)",
+    "level": "N5",
+    "meaning": "Tặng quà cho ai (〜にあげます) / Nhận quà từ ai (〜にもらいます/からもらいます)",
+    "structure": "[Người nhận] + に + [Đồ vật] + を + あげます / [Người cho] + に/から + [Đồ vật] + を + もらいます",
+    "commonMistakes": "Không dùng あげます khi người nhận là chính mình (tôi).",
+    "examples": [
+      {
+        "japanese": "母に花をあげました。",
+        "romaji": "Haha ni hana o agemashita.",
+        "meaning": "Tôi đã tặng hoa cho mẹ."
+      },
+      {
+        "japanese": "友達にプレゼントをもらいました。",
+        "romaji": "Tomodachi ni purezento o moraimashita.",
+        "meaning": "Tôi đã nhận được món quà từ bạn bè."
+      }
+    ]
   },
   {
-    title: "〜ないでください (naide kudasai)",
-    level: "N5",
-    meaning: "Làm ơn đừng... — Yêu cầu không làm gì đó",
-    structure: "[V-negative stem (ない form)] + でください",
-    commonMistakes: "Nhẹ nhàng hơn 〜てはいけません. Dùng khi nhắn nhủ ai đó, không phải quy định cứng nhắc.",
-    examples: [
-      { japanese: "ここで写真を撮らないでください。", romaji: "Koko de shashin wo toranaide kudasai.", meaning: "Làm ơn đừng chụp ảnh ở đây." },
-      { japanese: "忘れないでください！", romaji: "Wasurenaide kudasai!", meaning: "Đừng quên nhé！" },
-    ],
+    "title": "もう 〜ました / まだ 〜ていません",
+    "level": "N5",
+    "meaning": "Đã làm gì rồi / Chưa làm gì",
+    "structure": "もう + [V-ました] / まだです (chưa làm)",
+    "commonMistakes": "Trả lời 'Chưa làm' không dùng「いいえ、しませんでした」(tôi đã không làm), mà dùng「いいえ、まだです」(chưa).",
+    "examples": [
+      {
+        "japanese": "もう昼ご飯を食べましたか？",
+        "romaji": "Mou hirugohan o tabemashita ka?",
+        "meaning": "Bạn đã ăn trưa chưa?"
+      },
+      {
+        "japanese": "いいえ、まだです。これから食べます。",
+        "romaji": "Iie, mada desu. Korekara tabemasu.",
+        "meaning": "Chưa, tôi chuẩn bị ăn đây."
+      }
+    ]
   },
   {
-    title: "〜てから (te kara) — Sau khi...",
-    level: "N5",
-    meaning: "Sau khi làm X thì làm Y — Thứ tự hành động",
-    structure: "[Te-form V1] + から + [V2]",
-    commonMistakes: "てから nhấn mạnh thứ tự: X XONG RỒI mới Y. Khác với あとで (sau đó) — あとで không bắt buộc thứ tự chặt chẽ.",
-    examples: [
-      { japanese: "手を洗ってから、ご飯を食べます。", romaji: "Te wo aratte kara, gohan wo tabemasu.", meaning: "Sau khi rửa tay thì ăn cơm." },
-      { japanese: "宿題をしてから、遊びます。", romaji: "Shukudai wo shite kara, asobimasu.", meaning: "Làm bài tập xong rồi mới chơi." },
-    ],
+    "title": "Tính từ đuôi い (i-Adjective)",
+    "level": "N5",
+    "meaning": "Tính từ có tận cùng là chữ い (Lớn, nhỏ, ngon, đắt, nóng, lạnh...)",
+    "structure": "Khẳng định: 〜いです / Phủ định: 〜くないです / Quá khứ: 〜かったです / QK phủ định: 〜くなかったです",
+    "commonMistakes": "Riêng từ「いい」(tốt) chia biến thể theo「よい」: よくない, よかった, よくなかった.",
+    "examples": [
+      {
+        "japanese": "昨日は寒くなかったです。",
+        "romaji": "Kinou wa samukunakatta desu.",
+        "meaning": "Hôm qua trời đã không lạnh."
+      },
+      {
+        "japanese": "この寿司はとても美味しいです。",
+        "romaji": "Kono sushi wa totemo oishii desu.",
+        "meaning": "Món sushi này rất ngon."
+      }
+    ]
   },
   {
-    title: "〜のが好き / 嫌い (no ga suki / kirai)",
-    level: "N5",
-    meaning: "Thích/Ghét làm gì đó — Danh từ hóa động từ bằng の",
-    structure: "[Động từ thể thường] + のが + 好き/嫌い/得意/下手 + です",
-    commonMistakes: "の ở đây danh từ hóa cả cụm động từ. 泳ぐのが好き (thích bơi) — の thay thế cho 'việc bơi'.",
-    examples: [
-      { japanese: "日本語を話すのが好きです。", romaji: "Nihongo wo hanasu no ga suki desu.", meaning: "Tôi thích nói tiếng Nhật." },
-      { japanese: "料理をするのが得意です。", romaji: "Ryōri wo suru no ga tokui desu.", meaning: "Tôi giỏi nấu ăn." },
-      { japanese: "早起きするのが嫌いです。", romaji: "Hayaoki suru no ga kirai desu.", meaning: "Tôi ghét dậy sớm." },
-    ],
+    "title": "Tính từ đuôi な (na-Adjective)",
+    "level": "N5",
+    "meaning": "Tính từ miêu tả trạng thái (Yên tĩnh, đẹp, thân thiện, nổi tiếng, rảnh rỗi...)",
+    "structure": "Đứng trước danh từ: [Tính từ] + な + N / Cuối câu: [Tính từ] + です / じゃありません",
+    "commonMistakes": "Khi đứng cuối câu thì bỏ な (静かです). Khi bổ nghĩa danh từ thì thêm な (静かな町). Chú ý 綺麗 (kirei) và 有名 (yuumei) tận cùng âm i nhưng là tính từ đuôi な!",
+    "examples": [
+      {
+        "japanese": "京都は静かで綺麗な町です。",
+        "romaji": "Kyouto wa shizuka de kirei na machi desu.",
+        "meaning": "Kyoto là một thành phố yên bình và xinh đẹp."
+      },
+      {
+        "japanese": "この通りはあまり有名じゃありません。",
+        "romaji": "Kono toori wa amari yuumei ja arimasen.",
+        "meaning": "Con phố này không nổi tiếng lắm."
+      }
+    ]
   },
   {
-    title: "〜もう / まだ (mou / mada)",
-    level: "N5",
-    meaning: "もう = Rồi / Đã (affirmative) / Không còn... nữa (negative). まだ = Vẫn còn / Chưa",
-    structure: "もう + [Khẳng định] / もう〜ない = Không còn. まだ + [Khẳng định] = Vẫn còn / まだ + [Phủ định] = Chưa",
-    commonMistakes: "もう食べました = Đã ăn rồi. もう食べません = Không ăn nữa. まだ食べます = Vẫn còn đang ăn. まだ食べていません = Chưa ăn.",
-    examples: [
-      { japanese: "もう宿題をしました。", romaji: "Mou shukudai wo shimashita.", meaning: "Đã làm bài tập rồi." },
-      { japanese: "まだ日本語を勉強しています。", romaji: "Mada nihongo wo benkyou shite imasu.", meaning: "Vẫn đang học tiếng Nhật." },
-      { japanese: "まだ食べていません。", romaji: "Mada tabete imasen.", meaning: "Chưa ăn." },
-    ],
+    "title": "〜が好き / 嫌い / 上手 / 下手 (suki / kirai / jouzu / heta)",
+    "level": "N5",
+    "meaning": "Thích / Ghét / Giỏi / Kém cái gì — Trợ từ が đi trước",
+    "structure": "[Danh từ] + が + [好き / 嫌い / 上手 / 下手] + です",
+    "commonMistakes": "Dùng trợ từ が, KHÔNG dùng trợ từ を với các tính từ chỉ năng lực và cảm xúc này.",
+    "examples": [
+      {
+        "japanese": "私は日本のアニメが好きです。",
+        "romaji": "Watashi wa nihon no anime ga suki desu.",
+        "meaning": "Tôi rất thích Anime Nhật Bản."
+      },
+      {
+        "japanese": "田中さんは歌がとても上手です。",
+        "romaji": "Tanaka-san wa uta ga totemo jouzu desu.",
+        "meaning": "Anh Tanaka hát rất giỏi."
+      }
+    ]
   },
   {
-    title: "〜なければなりません (nakereba narimasen)",
-    level: "N5",
-    meaning: "Phải làm gì đó — Diễn tả nghĩa vụ hoặc sự cần thiết bắt buộc",
-    structure: "[V-nai (bỏ い)] + ければなりません",
-    commonMistakes: "Dạng thân mật hàng ngày: 〜なきゃ (nakya) hoặc 〜なくちゃ (nakucha). Chú ý không bỏ sót ければ.",
-    examples: [
-      { japanese: "薬を飲まなければなりません。", romaji: "Kusuri wo nomanakereba narimasen.", meaning: "Tôi phải uống thuốc." },
-      { japanese: "明日早く起きなければなりません。", romaji: "Ashita hayaku okinakereba narimasen.", meaning: "Ngày mai tôi phải dậy sớm." },
-    ],
+    "title": "〜があります / います (arimasu / imasu — Có / Tồn tại)",
+    "level": "N5",
+    "meaning": "Biểu thị sự sở hữu hoặc sự có mặt (Vật vô tri: あります / Người, động vật: います)",
+    "structure": "[Địa điểm] + に + [Chủ thể] + が + [あります / います]",
+    "commonMistakes": "Đồ vật, cây cối, sự việc dùng あります. Người, động vật cử động dùng います.",
+    "examples": [
+      {
+        "japanese": "机の上に本があります。",
+        "romaji": "Tsukue no ue ni hon ga arimasu.",
+        "meaning": "Trên bàn có cuốn sách."
+      },
+      {
+        "japanese": "庭に可愛い犬がいます。",
+        "romaji": "Niwa ni kawaii inu ga imasu.",
+        "meaning": "Trong sân có một chú chó đáng yêu."
+      }
+    ]
   },
   {
-    title: "〜ことができます (koto ga dekimasu)",
-    level: "N5",
-    meaning: "Có thể làm gì đó — Diễn đạt năng lực hoặc tính khả thi",
-    structure: "[V thể từ điển (Jishokei)] + ことができます",
-    commonMistakes: "Trước ことができます LUÔN là động từ thể từ điển (nguyên mẫu), không dùng thể ます.",
-    examples: [
-      { japanese: "日本語を話すことができます。", romaji: "Nihongo wo hanasu koto ga dekimasu.", meaning: "Tôi có thể nói tiếng Nhật." },
-      { japanese: "ここでカードを使うことができますか？", romaji: "Koko de kaado wo tsukau koto ga dekimasu ka?", meaning: "Ở đây có thể thanh toán bằng thẻ được không?" },
-    ],
+    "title": "Số đếm & Lượng từ (Counters in N5)",
+    "level": "N5",
+    "meaning": "Đếm đồ vật chung (〜つ), người (〜人), vật dài (〜本), tờ mỏng (〜枚), động vật nhỏ (〜匹)",
+    "structure": "[Danh từ] + を + [Lượng từ] + [Động từ]",
+    "commonMistakes": "Lượng từ thường đặt trực tiếp trước động từ, không cần trợ từ ở giữa:「りんごを 3つ 買いました」.",
+    "examples": [
+      {
+        "japanese": "りんごを3つ買いました。",
+        "romaji": "Ringo o mittsu kaimashita.",
+        "meaning": "Tôi đã mua 3 quả táo."
+      },
+      {
+        "japanese": "ビールを2本ください。",
+        "romaji": "Biiru o nihon kudasai.",
+        "meaning": "Cho tôi xin 2 chai bia ạ."
+      }
+    ]
   },
   {
-    title: "〜たことがあります (ta koto ga arimasu)",
-    level: "N5",
-    meaning: "Đã từng làm gì đó — Kể về kinh nghiệm trải nghiệm trong quá khứ",
-    structure: "[V-ta (thể quá khứ ngắn)] + ことがあります",
-    commonMistakes: "Chỉ dùng để nói về kinh nghiệm một vài lần trong đời. Không dùng cho hành động hàng ngày như 'hôm qua tôi đã ăn cơm'.",
-    examples: [
-      { japanese: "日本へ行ったことがあります。", romaji: "Nihon e itta koto ga arimasu.", meaning: "Tôi đã từng đi Nhật Bản." },
-      { japanese: "富士山に登ったことがありますか？", romaji: "Fujisan ni nobotta koto ga arimasu ka?", meaning: "Bạn đã từng leo núi Phú Sĩ chưa?" },
-    ],
+    "title": "〜より 〜のほうが 〜 (So sánh)",
+    "level": "N5",
+    "meaning": "So với A thì B hơn...",
+    "structure": "[A] + より + [B] + のほうが + [Tính từ] + です",
+    "commonMistakes": "Nhớ rằng bên có「のほうが」luôn là bên chiếm ưu thế hơn trong câu so sánh.",
+    "examples": [
+      {
+        "japanese": "電車はバスより速いです。",
+        "romaji": "Densha wa basu yori hayai desu.",
+        "meaning": "Tàu điện chạy nhanh hơn xe buýt."
+      },
+      {
+        "japanese": "夏より冬のほうが好きです。",
+        "romaji": "Natsu yori fuyu no hou ga suki desu.",
+        "meaning": "So với mùa hè thì tôi thích mùa đông hơn."
+      }
+    ]
   },
   {
-    title: "〜たり〜たりする (tari ... tari suru)",
-    level: "N5",
-    meaning: "Lúc thì làm A, lúc thì làm B — Liệt kê một vài hành động tiêu biểu",
-    structure: "[V1-ta] + り、[V2-ta] + り します / しました",
-    commonMistakes: "Phải kết thúc bằng します (hiện tại/tương lai) hoặc しました (quá khứ). Không được thiếu từ kết thúc.",
-    examples: [
-      { japanese: "休みの日は本を読んだり、音楽を聞いたりします。", romaji: "Yasumi no hi wa hon wo yondari, ongaku wo kiitari shimasu.", meaning: "Vào ngày nghỉ tôi lúc thì đọc sách, lúc thì nghe nhạc." },
-      { japanese: "昨日は買い物をしたり、映画を見たりしました。", romaji: "Kinou wa kaimono wo shitari, eiga wo mitari shimashita.", meaning: "Hôm qua tôi đã đi mua sắm rồi xem phim." },
-    ],
+    "title": "〜たい / 〜がほしい (Muốn làm gì / Muốn có cái gì)",
+    "level": "N5",
+    "meaning": "Bày tỏ ước muốn của bản thân (Muốn làm V: V-たい / Muốn có vật: N が ほしい)",
+    "structure": "[V-bỏ ます] + たいです / [Danh từ] + が + ほしいです",
+    "commonMistakes": "Chỉ dùng trực tiếp cho mong muốn của ngôi thứ nhất (tôi). Muốn hỏi người khác dùng「〜たいですか」.",
+    "examples": [
+      {
+        "japanese": "日本へ旅行に行きたいです。",
+        "romaji": "Nihon e ryokou ni ikitai desu.",
+        "meaning": "Tôi muốn đi du lịch Nhật Bản."
+      },
+      {
+        "japanese": "新しいパソコンがほしいです。",
+        "romaji": "Atarashii pasokon ga hoshii desu.",
+        "meaning": "Tôi muốn có một chiếc máy tính mới."
+      }
+    ]
   },
   {
-    title: "〜つもりです (tsumori desu)",
-    level: "N5",
-    meaning: "Dự định làm gì đó — Thể hiện ý định hoặc kế hoạch cá nhân",
-    structure: "[V thể từ điển] + つもりです (Dự định làm) / [V-nai] + つもりです (Dự định không làm)",
-    commonMistakes: "Chỉ dùng cho dự định của bản thân (ngôi thứ nhất) hoặc hỏi người nghe. Không dùng tùy tiện để phán đoán người khác.",
-    examples: [
-      { japanese: "来年日本へ旅行するつもりです。", romaji: "Rainen Nihon e ryokou suru tsumori desu.", meaning: "Tôi dự định sang năm sẽ đi du lịch Nhật Bản." },
-      { japanese: "タバコをやめるつもりです。", romaji: "Tabako wo yameru tsumori desu.", meaning: "Tôi có ý định sẽ bỏ hút thuốc lá." },
-    ],
+    "title": "〜へ 〜に 行きます / 来ます (Mục đích di chuyển)",
+    "level": "N5",
+    "meaning": "Đi / Đến đâu để làm mục đích gì",
+    "structure": "[Địa điểm] + へ + [V-bỏ ます / Danh từ] + に + 行きます",
+    "commonMistakes": "Động từ biểu thị mục đích phải bỏ ます rồi gắn に.",
+    "examples": [
+      {
+        "japanese": "デパートへ買い物に行きます。",
+        "romaji": "Depaato e kaimono ni ikimasu.",
+        "meaning": "Tôi đi đến trung tâm thương mại để mua sắm."
+      },
+      {
+        "japanese": "スーパーへ牛乳を買いに行きました。",
+        "romaji": "Suupaa e gyuunyuu o kai ni ikimashita.",
+        "meaning": "Tôi đã đi siêu thị để mua sữa."
+      }
+    ]
   },
   {
-    title: "〜ほうがいいです (hou ga ii desu)",
-    level: "N5",
-    meaning: "Nên làm gì / Không nên làm gì — Đưa ra lời khuyên nhủ lịch sự",
-    structure: "[V-ta] + ほうがいいです (Nên làm) / [V-nai] + ほうがいいです (Không nên làm)",
-    commonMistakes: "Khuyên nên làm thì dùng thể Ta: 食べたほうがいい (không dùng 食べる). Khuyên không nên thì dùng thể Nai: 行かないほうがいい.",
-    examples: [
-      { japanese: "病院へ行ったほうがいいですよ。", romaji: "Byouin e itta hou ga ii desu yo.", meaning: "Bạn nên đi bệnh viện khám thì hơn đấy." },
-      { japanese: "無理をしないほうがいいです。", romaji: "Muri wo shinai hou ga ii desu.", meaning: "Bạn không nên làm việc quá sức." },
-    ],
+    "title": "Thể Te (〜て形 - Te-form) & 〜てください",
+    "level": "N5",
+    "meaning": "Biến thể nền tảng quan trọng nhất trong tiếng Nhật sơ cấp & Mẫu câu yêu cầu, xin hãy...",
+    "structure": "[V-て] + ください (Xin hãy làm gì đó)",
+    "commonMistakes": "Quy tắc chia nhóm I: い/ち/り -> って, み/び/に -> んで, き -> いて, ぎ -> いで, し -> して. Nhóm II: bỏ ます thêm て. Nhóm III: して / きて.",
+    "examples": [
+      {
+        "japanese": "ここに名前を書いてください。",
+        "romaji": "Koko ni namae o kaite kudasai.",
+        "meaning": "Xin hãy viết họ tên của bạn vào đây."
+      },
+      {
+        "japanese": "ゆっくり話してください。",
+        "romaji": "Yukkuri hanashite kudasai.",
+        "meaning": "Xin vui lòng nói chậm lại một chút ạ."
+      }
+    ]
   },
   {
-    title: "〜より〜のほうが (yori ... no hou ga)",
-    level: "N5",
-    meaning: "B thì [tính từ] hơn A — Mẫu câu so sánh hơn trong tiếng Nhật",
-    structure: "[A] より [B] のほうが [Tính từ] です",
-    commonMistakes: "Chủ thể được khen hơn sẽ đi liền trước のほうが. Dễ nhầm vị trí A và B.",
-    examples: [
-      { japanese: "電車より新幹線のほうが速いです。", romaji: "Densha yori Shinkansen no hou ga hayai desu.", meaning: "Tàu Shinkansen thì nhanh hơn tàu điện thường." },
-      { japanese: "夏より冬のほうが好きです。", romaji: "Natsu yori fuyu no hou ga suki desu.", meaning: "Tôi thích mùa đông hơn mùa hè." },
-    ],
+    "title": "〜ています (Đang diễn ra / Trạng thái kết quả)",
+    "level": "N5",
+    "meaning": "Đang thực hiện hành động (tiếp diễn) hoặc đang duy trì trạng thái (kết hôn, sống ở, biết)",
+    "structure": "[V-て] + います",
+    "commonMistakes": "Các động từ trạng thái như 結婚しています (đã kết hôn), 住んでいます (đang sinh sống tại), 知っています (biết) luôn dùng 〜ています.",
+    "examples": [
+      {
+        "japanese": "今、日本語を勉強しています。",
+        "romaji": "Ima, nihongo o benkyou shite imasu.",
+        "meaning": "Bây giờ tôi đang học tiếng Nhật."
+      },
+      {
+        "japanese": "ハノイに住んでいます。",
+        "romaji": "Hanoi ni sunde imasu.",
+        "meaning": "Tôi đang sinh sống tại Hà Nội."
+      }
+    ]
   },
   {
-    title: "〜の中で〜が一番 (no naka de ... ga ichiban)",
-    level: "N5",
-    meaning: "Trong số... thì... là nhất — Mẫu câu so sánh nhất",
-    structure: "[Phạm vi] の中で [Chủ thể] が 一番 [Tính từ] です",
-    commonMistakes: "Hỏi: [Phạm vi] の中で [なに/だれ/どこ/いつ] が一番〜ですか？ Trả lời bằng が 一番.",
-    examples: [
-      { japanese: "日本料理の中で寿司が一番好きです。", romaji: "Nihon ryouri no naka de sushi ga ichiban suki desu.", meaning: "Trong các món ăn Nhật, tôi thích nhất là sushi." },
-      { japanese: "スポーツの中で何が一番面白いですか？", romaji: "Supootsu no naka de nani ga ichiban omoshiroi desu ka?", meaning: "Trong các môn thể thao, môn nào thú vị nhất?" },
-    ],
+    "title": "〜てもいいです / 〜てはいけません (Cho phép & Cấm đoán)",
+    "level": "N5",
+    "meaning": "Được phép làm gì... / Không được phép làm gì (Cấm)",
+    "structure": "[V-て] + もいいです (Được phép) / [V-て] + はいけません (Cấm)",
+    "commonMistakes": "Khi xin phép làm gì:「〜てもいいですか？」. Nếu từ chối nhẹ nhàng:「すみません、ちょっと...」.",
+    "examples": [
+      {
+        "japanese": "写真を撮ってもいいですか？",
+        "romaji": "Shashin o totte mo ii desu ka?",
+        "meaning": "Tôi có thể chụp ảnh ở đây được không?"
+      },
+      {
+        "japanese": "ここでタバコを吸ってはいけません。",
+        "romaji": "Koko de tabako o sutte wa ikemasen.",
+        "meaning": "Không được hút thuốc ở khu vực này."
+      }
+    ]
   },
   {
-    title: "〜まえに (mae ni) — Trước khi...",
-    level: "N5",
-    meaning: "Trước khi làm việc A thì làm B — Mốc thời gian trước",
-    structure: "[V thể từ điển] + まえに / [Danh từ] + のまえに",
-    commonMistakes: "Dù hành động xảy ra trong quá khứ thì động từ trước まえに VẪN LUÔN ở thể từ điển: 寝るまえに (trước khi ngủ), không chia quá khứ.",
-    examples: [
-      { japanese: "寝るまえに、本を読みます。", romaji: "Neru mae ni, hon wo yomimasu.", meaning: "Trước khi đi ngủ, tôi đọc sách." },
-      { japanese: "食事のまえに、手を洗います。", romaji: "Shokuji no mae ni, te wo arawimasu.", meaning: "Trước bữa ăn, tôi rửa sạch tay." },
-    ],
+    "title": "〜てから (Sau khi làm A thì làm B)",
+    "level": "N5",
+    "meaning": "Sau khi hoàn thành hành động 1 thì mới làm hành động 2",
+    "structure": "[V1-て] + から、[V2]",
+    "commonMistakes": "Hành động 1 kết thúc dứt điểm rồi mới tới hành động 2.",
+    "examples": [
+      {
+        "japanese": "手を洗ってから、ご飯を食べます。",
+        "romaji": "Te o aratte kara, gohan o tabemasu.",
+        "meaning": "Sau khi rửa tay sạch sẽ, tôi mới ăn cơm."
+      },
+      {
+        "japanese": "大学を卒業してから、日本で働きます。",
+        "romaji": "Daigaku o sotsugyou shite kara, Nihon de hatarakimasu.",
+        "meaning": "Sau khi tốt nghiệp đại học, tôi sẽ làm việc tại Nhật."
+      }
+    ]
   },
   {
-    title: "〜あとで (ato de) — Sau khi...",
-    level: "N5",
-    meaning: "Sau khi làm A thì làm B — Mốc thời gian sau",
-    structure: "[V-ta] + あとで / [Danh từ] + のあとで",
-    commonMistakes: "Trước あとで luôn là động từ thể Ta (quá khứ) hoặc Danh từ + の.",
-    examples: [
-      { japanese: "ご飯を食べたあとで、散歩します。", romaji: "Gohan wo tabeta ato de, sanpo shimasu.", meaning: "Sau khi ăn cơm xong, tôi đi dạo bộ." },
-      { japanese: "仕事のあとで、飲みに行きましょう。", romaji: "Shigoto no ato de, nomi ni ikimashou.", meaning: "Sau giờ làm việc, chúng mình đi uống nhé." },
-    ],
+    "title": "Thể Nai (〜ない形 - Nai-form) & 〜ないでください",
+    "level": "N5",
+    "meaning": "Dạng phủ định ngắn & Mẫu câu 'Xin đừng làm gì'",
+    "structure": "[V-ない] + でください",
+    "commonMistakes": "Nhóm I: đổi âm i sang hàng a rồi thêm ない (書く -> 書かない). Nhóm II: bỏ ます thêm ない (食べる -> 食べない). Nhóm III: しない / こない.",
+    "examples": [
+      {
+        "japanese": "ここで写真を撮らないでください。",
+        "romaji": "Koko de shashin o toranaide kudasai.",
+        "meaning": "Xin vui lòng không chụp ảnh ở đây."
+      },
+      {
+        "japanese": "パスポートを忘れないでください。",
+        "romaji": "Pasupooto o wasurenaide kudasai.",
+        "meaning": "Xin đừng bỏ quên hộ chiếu nhé."
+      }
+    ]
   },
   {
-    title: "〜ながら (nagara) — Vừa... vừa...",
-    level: "N5",
-    meaning: "Vừa làm hành động A vừa làm hành động B cùng một lúc",
-    structure: "[V1-masu (bỏ ます)] + ながら + [V2]",
-    commonMistakes: "Hành động chính nằm ở V2 (hành động phía sau). V1 là hành động phụ kèm theo.",
-    examples: [
-      { japanese: "音楽を聞きながら、勉強します。", romaji: "Ongaku wo kikinagara, benkyou shimasu.", meaning: "Tôi vừa nghe nhạc vừa học bài." },
-      { japanese: "歩きながら、スマホを見ないでください。", romaji: "Arukinagara, sumaho wo minaide kudasai.", meaning: "Xin đừng vừa đi bộ vừa nhìn điện thoại." },
-    ],
+    "title": "〜なければなりません (Phải làm gì)",
+    "level": "N5",
+    "meaning": "Bắt buộc phải làm một việc gì đó (nghĩa vụ)",
+    "structure": "[V-bỏ い của ない] + ければなりません",
+    "commonMistakes": "Dạng rút gọn trong khẩu ngữ thường gặp là 〜なきゃ.",
+    "examples": [
+      {
+        "japanese": "毎日薬を飲まなければなりません。",
+        "romaji": "Mainichi kusuri o nomanakereba narimasen.",
+        "meaning": "Mỗi ngày tôi đều phải uống thuốc."
+      },
+      {
+        "japanese": "明日テストがあるから、勉強しなければなりません。",
+        "romaji": "Ashita tesuto ga aru kara, benkyou shinakereba narimasen.",
+        "meaning": "Vì mai có bài kiểm tra nên tôi phải học bài."
+      }
+    ]
   },
   {
-    title: "〜すぎます (sugimasu) — Quá mức",
-    level: "N5",
-    meaning: "Quá mức, quá đáng — Diễn tả sự vượt quá giới hạn bình thường",
-    structure: "[V-masu (bỏ ます)] + すぎます / [Tính từ -i (bỏ い)] + すぎます / [Tính từ -na] + すぎます",
-    commonMistakes: "Tính từ đuôi い phải bỏ い (高すぎる, không phải 高いすぎる). Thường mang ý nghĩa tiêu cực.",
-    examples: [
-      { japanese: "昨日食べすぎました。", romaji: "Kinou tabesugimashita.", meaning: "Hôm qua tôi ăn nhiều quá mức." },
-      { japanese: "この問題は難しすぎます。", romaji: "Kono mondai wa muzukashisugimasu.", meaning: "Câu hỏi này khó quá." },
-    ],
+    "title": "Thể Từ Điển (辞書形) & 〜ことができます (Khả năng)",
+    "level": "N5",
+    "meaning": "Có thể làm được điều gì đó (năng lực / điều kiện)",
+    "structure": "[V-thể từ điển] + ことが できます",
+    "commonMistakes": "Nhóm I: tận cùng hàng u (iku, nomu). Nhóm II: tận cùng eru/iru (taberu, miru). Nhóm III: suru, kuru.",
+    "examples": [
+      {
+        "japanese": "私は漢字を50個書くことができます。",
+        "romaji": "Watashi wa kanji o 50-ko kaku koto ga dekimasu.",
+        "meaning": "Tôi có thể viết được 50 chữ Hán Kanji."
+      },
+      {
+        "japanese": "このホテルで日本円を両替することができます。",
+        "romaji": "Kono hoteru de nihon'en o ryougae suru koto ga dekimasu.",
+        "meaning": "Tại khách sạn này có thể đổi tiền Yên Nhật được."
+      }
+    ]
   },
   {
-    title: "〜くなります / になります (narimasu)",
-    level: "N5",
-    meaning: "Trở nên, trở thành — Diễn đạt sự biến đổi trạng thái",
-    structure: "[Tính từ -i (bỏ い)] + くなります / [Tính từ -na / Danh từ] + になります",
-    commonMistakes: "Tính từ -i thì dùng く, Tính từ -na và Danh từ thì dùng に.",
-    examples: [
-      { japanese: "寒くなりましたね。", romaji: "Samuku narimashita ne.", meaning: "Trời đã trở nên lạnh rồi nhỉ." },
-      { japanese: "日本語が上手になりました。", romaji: "Nihongo ga jouzu ni narimashita.", meaning: "Tiếng Nhật của bạn đã giỏi lên rồi." },
-    ],
+    "title": "〜まえに (Trước khi làm gì...)",
+    "level": "N5",
+    "meaning": "Trước khi làm hành động A thì làm B",
+    "structure": "[V-thể từ điển] + まえに / [Danh từ] + のまえに",
+    "commonMistakes": "Luôn dùng thể từ điển trước まえに, dù câu nói ở thì quá khứ.",
+    "examples": [
+      {
+        "japanese": "寝るまえに、日記を書きます。",
+        "romaji": "Neru mae ni, nikki o kakimasu.",
+        "meaning": "Trước khi đi ngủ, tôi viết nhật ký."
+      },
+      {
+        "japanese": "食事のまえに、手を洗います。",
+        "romaji": "Shokuji no mae ni, te o araimasu.",
+        "meaning": "Trước bữa ăn, tôi rửa tay."
+      }
+    ]
   },
   {
-    title: "〜から / 〜ので (kara / node) — Vì... nên...",
-    level: "N5",
-    meaning: "Chỉ nguyên nhân, lý do — Vì lý do này nên dẫn tới kết quả kia",
-    structure: "[Mệnh đề nguyên nhân] + から / ので + [Mệnh đề kết quả]",
-    commonMistakes: "から mang tính chủ quan, cảm xúc cá nhân. ので mang tính khách quan, lịch sự và trang trọng hơn.",
-    examples: [
-      { japanese: "時間がありませんから、タクシーで行きます。", romaji: "Jikan ga arimasen kara, takushii de ikimasu.", meaning: "Vì không có thời gian nên tôi sẽ đi bằng taxi." },
-      { japanese: "雨が降っているので、傘を持って行きます。", romaji: "Ame ga futte iru node, kasa wo motte ikimasu.", meaning: "Vì trời đang mưa nên tôi mang theo ô dù." },
-    ],
+    "title": "Thể Ta (〜た形 - Ta-form) & 〜たことがあります (Kinh nghiệm)",
+    "level": "N5",
+    "meaning": "Đã từng có trải nghiệm làm việc gì trong quá khứ",
+    "structure": "[V-た] + ことが あります",
+    "commonMistakes": "Chia thể Ta giống hệt thể Te (thay て bằng た, で bằng だ).",
+    "examples": [
+      {
+        "japanese": "富士山に登ったことがあります。",
+        "romaji": "Fujisan ni nobotta koto ga arimasu.",
+        "meaning": "Tôi đã từng leo núi Phú Sĩ."
+      },
+      {
+        "japanese": "日本の納豆を食べたことがありますか？",
+        "romaji": "Nihon no nattou o tabeta koto ga arimasu ka?",
+        "meaning": "Bạn đã từng ăn món Natto của Nhật chưa?"
+      }
+    ]
   },
   {
-    title: "〜でしょう / だろう (deshou / darou)",
-    level: "N5",
-    meaning: "Có lẽ là... / Chắc là... — Phỏng đoán nhẹ nhàng hoặc tìm kiếm sự đồng tình",
-    structure: "[Thể thông thường] + でしょう (lịch sự) / だろう (thân mật)",
-    commonMistakes: "Với Danh từ và Tính từ -na ở hiện tại khẳng định, bỏ だ trước でしょう.",
-    examples: [
-      { japanese: "明日はいい天気になるでしょう。", romaji: "Ashita wa ii tenki ni naru deshou.", meaning: "Ngày mai chắc là thời tiết sẽ đẹp." },
-      { japanese: "北海道は今とても寒いでしょう。", romaji: "Hokkaidou wa ima totemo samui deshou.", meaning: "Hokkaido bây giờ chắc là lạnh lắm nhỉ." },
-    ],
+    "title": "〜たり 〜たり します (Liệt kê hành động tiêu biểu)",
+    "level": "N5",
+    "meaning": "Lúc thì làm A, lúc thì làm B...",
+    "structure": "[V1-た] + り、[V2-た] + り + します",
+    "commonMistakes": "Phải kết thúc bằng động từ します (hoặc しました cho quá khứ).",
+    "examples": [
+      {
+        "japanese": "休みの日は本を読んだり、音楽を聞いたりします。",
+        "romaji": "Yasumi no hi wa hon o yondari, ongaku o kiitari shimasu.",
+        "meaning": "Ngày nghỉ tôi thường đọc sách, nghe nhạc,..."
+      },
+      {
+        "japanese": "昨日は買い物をしたり、映画を見たりしました。",
+        "romaji": "Kinou wa kaimono o shitari, eiga o mitari shimashita.",
+        "meaning": "Hôm qua tôi đã đi mua sắm và xem phim."
+      }
+    ]
   },
+  {
+    "title": "Thể Thông Thường (普通形 - Futsuukei)",
+    "level": "N5",
+    "meaning": "Dạng câu thân mật dùng với bạn bè, người thân và làm mệnh đề phụ",
+    "structure": "Động từ: V-る, V-ない, V-た, V-なかった / Tính từ: 寒い, 寒くない / Danh từ: だ, じゃない",
+    "commonMistakes": "Không dùng thể lịch sự (ます/です) bên trong các mệnh đề phụ như と思います, とき, から.",
+    "examples": [
+      {
+        "japanese": "明日雨が降ると思う。",
+        "romaji": "Ashita ame ga furu to omou.",
+        "meaning": "Mình nghĩ ngày mai trời sẽ mưa."
+      },
+      {
+        "japanese": "日本のアニメは面白いよ！",
+        "romaji": "Nihon no anime wa omoshiroi yo!",
+        "meaning": "Anime Nhật Bản thú vị lắm đấy!"
+      }
+    ]
+  },
+  {
+    "title": "〜と思います (Ý kiến & Suy nghĩ)",
+    "level": "N5",
+    "meaning": "Tôi nghĩ rằng... (Bày tỏ phán đoán hoặc quan điểm cá nhân)",
+    "structure": "[Thể thông thường (普通形)] + と 思います",
+    "commonMistakes": "Trước と luôn là thể thông thường (Futsuukei). Danh từ và Tính từ đuôi な phải thêm だ:「有名だと思います」.",
+    "examples": [
+      {
+        "japanese": "日本の物価は高いと思います。",
+        "romaji": "Nihon no bukka wa takai to omoimasu.",
+        "meaning": "Tôi nghĩ rằng vật giá ở Nhật Bản đắt đỏ."
+      },
+      {
+        "japanese": "明日はいい天気になると思います。",
+        "romaji": "Ashita wa ii tenki ni naru to omoimasu.",
+        "meaning": "Tôi nghĩ ngày mai thời tiết sẽ trở nên đẹp."
+      }
+    ]
+  }
 ];

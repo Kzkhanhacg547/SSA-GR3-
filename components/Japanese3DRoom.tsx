@@ -101,6 +101,9 @@ interface Japanese3DRoomProps {
   onStamp: () => void;
   allCities?: Array<{ slug: string; name: string; nameJa: string; landmark3D: string }>;
   onSelectCity?: (slug: string) => void;
+  locationId?: string;
+  initialProgress?: number;
+  onProgressUpdate?: (newPercent: number) => void;
 }
 
 type GallerySection = "GOURMET" | "HISTORY" | "LANDMARKS" | "ARTIFACTS" | "ETIQUETTE" | "LANGUAGE";
@@ -232,6 +235,9 @@ export function Japanese3DRoom({
   onStamp,
   allCities,
   onSelectCity,
+  locationId,
+  initialProgress = 0,
+  onProgressUpdate,
 }: Japanese3DRoomProps) {
   const { playClick, playFanfare, showToast } = useSoundAndTheme();
 
@@ -241,6 +247,11 @@ export function Japanese3DRoom({
   const [isShakingOmikuji, setIsShakingOmikuji] = useState(false);
   const [stampPounded, setStampPounded] = useState(false);
   const [exploredItems, setExploredItems] = useState<Set<string>>(new Set());
+  const [recentlyExploredId, setRecentlyExploredId] = useState<string | null>(null);
+
+  const scrollContainerRef = useRef<HTMLElement | null>(null);
+  const viewTimersRef = useRef<Map<string, NodeJS.Timeout>>(new Map());
+  const syncTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Prevent background scroll
   useEffect(() => {
@@ -254,18 +265,140 @@ export function Japanese3DRoom({
     };
   }, [isOpen]);
 
-  const markExplored = useCallback((id: string) => {
-    setExploredItems((prev) => {
-      const next = new Set(prev);
-      next.add(id);
-      return next;
-    });
-  }, []);
+  // Load saved progress from localStorage on open / city change
+  useEffect(() => {
+    if (!isOpen || typeof window === "undefined") return;
+    try {
+      const stored = localStorage.getItem(`nihon_journey_explored_${data.slug}`);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setExploredItems(new Set(parsed));
+          return;
+        }
+      }
+    } catch {}
+    setExploredItems(new Set());
+  }, [data.slug, isOpen]);
+
+  // Calculate exploration percentage
+  const totalCount =
+    data.delicacies.length +
+    (data.history?.milestones.length || 0) +
+    data.scenicPhotos.length +
+    data.culturalArtifacts.length +
+    (data.culturalEtiquette?.length || 0) +
+    data.language.length;
+  
+  const rawPercent = Math.round((exploredItems.size / Math.max(1, totalCount)) * 100);
+  const exploredPercent = Math.min(100, Math.max(status === "COMPLETED" ? 100 : (initialProgress || 0), rawPercent));
+
+  // Auto-save & sync progress to server & localStorage
+  const persistProgress = useCallback(
+    (nextSet: Set<string>) => {
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem(`nihon_journey_explored_${data.slug}`, JSON.stringify(Array.from(nextSet)));
+        } catch {}
+      }
+
+      const nextPercent = Math.min(100, Math.round((nextSet.size / Math.max(1, totalCount)) * 100));
+      onProgressUpdate?.(nextPercent);
+
+      if (locationId) {
+        if (syncTimeoutRef.current) clearTimeout(syncTimeoutRef.current);
+        syncTimeoutRef.current = setTimeout(async () => {
+          try {
+            await fetch("/api/journey/progress", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                locationId,
+                action: "update_progress",
+                progress: nextPercent,
+              }),
+            });
+          } catch {}
+        }, 400);
+      }
+    },
+    [data.slug, totalCount, locationId, onProgressUpdate]
+  );
+
+  const markExplored = useCallback(
+    (id: string, announce = false) => {
+      setExploredItems((prev) => {
+        if (prev.has(id)) return prev;
+        const next = new Set(prev);
+        next.add(id);
+        persistProgress(next);
+        return next;
+      });
+      if (announce) {
+        setRecentlyExploredId(id);
+        setTimeout(() => setRecentlyExploredId((curr) => (curr === id ? null : curr)), 2500);
+      }
+    },
+    [persistProgress]
+  );
+
+  // 3-Second Visibility Tracker via IntersectionObserver
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const currentTimers = viewTimersRef.current;
+    currentTimers.forEach((t) => clearTimeout(t));
+    currentTimers.clear();
+
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const exploreId = entry.target.getAttribute("data-explore-id");
+          if (!exploreId) return;
+
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.3) {
+            if (exploredItems.has(exploreId)) return;
+            if (currentTimers.has(exploreId)) return;
+
+            // Start 3-second dwell timer
+            const timer = setTimeout(() => {
+              markExplored(exploreId, true);
+              currentTimers.delete(exploreId);
+            }, 3000);
+
+            currentTimers.set(exploreId, timer);
+          } else {
+            // User scrolled away before 3s -> cancel
+            if (currentTimers.has(exploreId)) {
+              clearTimeout(currentTimers.get(exploreId));
+              currentTimers.delete(exploreId);
+            }
+          }
+        });
+      },
+      {
+        root: container,
+        threshold: [0.3],
+      }
+    );
+
+    const elements = container.querySelectorAll("[data-explore-id]");
+    elements.forEach((el) => observer.observe(el));
+
+    return () => {
+      observer.disconnect();
+      currentTimers.forEach((t) => clearTimeout(t));
+      currentTimers.clear();
+    };
+  }, [isOpen, activeSection, exploredItems, markExplored]);
 
   const openDetail = useCallback(
     (item: DetailModalItem, id: string) => {
       playChimeSound();
-      markExplored(id);
+      markExplored(id, true);
       setDetailItem(item);
     },
     [markExplored]
@@ -279,7 +412,7 @@ export function Japanese3DRoom({
       const f = OMIKUJI_FORTUNES[Math.floor(Math.random() * OMIKUJI_FORTUNES.length)];
       setOmikujiResult(f);
       setIsShakingOmikuji(false);
-      markExplored("omikuji");
+      markExplored("omikuji", true);
     }, 700);
   };
 
@@ -340,16 +473,6 @@ export function Japanese3DRoom({
     );
   }
 
-  // Calculate exploration percentage
-  const totalCount =
-    data.delicacies.length +
-    (data.history?.milestones.length || 0) +
-    data.scenicPhotos.length +
-    data.culturalArtifacts.length +
-    (data.culturalEtiquette?.length || 0) +
-    data.language.length;
-  const exploredPercent = Math.min(100, Math.round((exploredItems.size / Math.max(1, totalCount)) * 100));
-
   const SECTIONS: Array<{ id: GallerySection; label: string; icon: string; count: number }> = [
     { id: "GOURMET", label: "Ẩm Thực Đặc Sản", icon: "🍱", count: data.delicacies.length },
     { id: "HISTORY", label: "Lịch Sử & Niên Đại", icon: "📜", count: data.history?.milestones.length || 0 },
@@ -361,9 +484,9 @@ export function Japanese3DRoom({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-md flex flex-col items-center justify-start p-2 sm:p-4 md:p-6 animate-in fade-in duration-200">
-      <div className="w-full max-w-6xl my-auto rounded-3xl border border-slate-200/90 dark:border-slate-800/90 bg-slate-50 dark:bg-sumi-950 shadow-2xl overflow-hidden flex flex-col">
+      <div className="w-full max-w-6xl my-auto rounded-3xl border border-slate-200/90 dark:border-slate-800/90 bg-slate-50 dark:bg-sumi-950 shadow-2xl overflow-hidden flex flex-col max-h-[94vh]">
         {/* ── STICKY TOP APP BAR: Unified, Airy & Modern ────────────────── */}
-        <header className="glass-panel sticky top-0 z-30 px-4 sm:px-6 py-3 border-b border-slate-200/80 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <header className="glass-panel sticky top-0 z-30 px-4 sm:px-6 py-3 border-b border-slate-200/80 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white/95 dark:bg-sumi-900/95 backdrop-blur-md">
           <div className="flex items-center gap-3 min-w-0">
             <span className="text-2xl sm:text-3xl select-none shrink-0 p-1.5 rounded-2xl bg-white dark:bg-sumi-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
               {data.landmark3D}
@@ -376,10 +499,22 @@ export function Japanese3DRoom({
                 <Badge variant="sakura" className="font-bold text-xs uppercase tracking-wider">
                   {data.name}
                 </Badge>
-                <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1">
-                  <span>·</span>
-                  <span>{exploredPercent}% khám phá</span>
-                </span>
+                
+                {/* Live Exploration Progress Bar & Badge */}
+                <div className="flex items-center gap-2 bg-slate-100 dark:bg-sumi-800 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700">
+                  <div className="w-16 sm:w-20 h-1.5 bg-slate-200 dark:bg-sumi-950 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-sakura-500 to-emerald-500 transition-all duration-500 rounded-full"
+                      style={{ width: `${exploredPercent}%` }}
+                    />
+                  </div>
+                  <span className="text-[11px] font-black text-slate-700 dark:text-slate-200">
+                    {exploredPercent}%
+                  </span>
+                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-0.5" title="Tiến trình được lưu tự động theo thời gian thực">
+                    💾 Tự lưu
+                  </span>
+                </div>
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-lg mt-0.5">
                 {data.description}
@@ -500,8 +635,8 @@ export function Japanese3DRoom({
           })}
         </nav>
 
-        {/* ── EXHIBITION MAIN DISPLAY ───────────────────────────────────────── */}
-        <main className="flex-1 p-5 sm:p-8 overflow-y-auto space-y-6">
+        {/* ── EXHIBITION MAIN DISPLAY WITH SCROLL OBSERVER ──────────────────── */}
+        <main ref={scrollContainerRef} className="flex-1 p-5 sm:p-8 overflow-y-auto space-y-6">
           {/* 1. GOURMET TAB (Real verified food images & culinary culture) */}
           {activeSection === "GOURMET" && (
             <div className="space-y-6">
@@ -520,103 +655,127 @@ export function Japanese3DRoom({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {data.delicacies.map((item, idx) => (
-                  <Card
-                    key={idx}
-                    hover
-                    className="overflow-hidden p-0 border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-sumi-900/90 flex flex-col group"
-                  >
-                    {/* Real food image banner */}
-                    <div className="relative aspect-[16/10] w-full bg-slate-100 dark:bg-sumi-800 overflow-hidden">
-                      {item.imageUrl ? (
-                        <Image
-                          src={item.imageUrl}
-                          alt={item.name}
-                          fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-6xl">
-                          {item.icon}
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                      <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between text-white">
-                        <div>
-                          <p className="font-jp font-black text-lg drop-shadow-md text-amber-300">
-                            {item.nameJa || item.name}
-                          </p>
-                          <p className="font-bold text-sm drop-shadow-md">{item.name}</p>
-                        </div>
-                        <span className="text-2xl drop-shadow-md bg-white/20 backdrop-blur-md p-1.5 rounded-xl">
-                          {item.icon}
-                        </span>
-                      </div>
-                    </div>
+                {data.delicacies.map((item, idx) => {
+                  const exploreId = `food-${idx}`;
+                  const isExplored = exploredItems.has(exploreId);
+                  const isRecent = recentlyExploredId === exploreId;
 
-                    {/* Card Content */}
-                    <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
-                      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                        {item.desc}
-                      </p>
-
-                      {item.taste && (
-                        <div className="p-2.5 rounded-xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200/70 dark:border-amber-900/40 text-[11px] text-amber-900 dark:text-amber-200 leading-snug">
-                          <strong className="font-bold text-amber-700 dark:text-amber-400 mr-1">Vị đặc trưng:</strong>
-                          {item.taste}
+                  return (
+                    <Card
+                      key={idx}
+                      data-explore-id={exploreId}
+                      hover
+                      className={`overflow-hidden p-0 border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-sumi-900/90 flex flex-col group relative transition-all duration-300 ${
+                        isRecent ? "ring-2 ring-emerald-500 shadow-lg scale-[1.01]" : isExplored ? "border-emerald-300/80 dark:border-emerald-800/80" : ""
+                      }`}
+                    >
+                      {/* Real food image banner */}
+                      <div className="relative aspect-[16/10] w-full bg-slate-100 dark:bg-sumi-800 overflow-hidden">
+                        {/* 3s view / explored status indicator tag */}
+                        <div className="absolute top-3 left-3 z-10">
+                          {isExplored ? (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-600/95 text-white backdrop-blur-md shadow-md animate-in fade-in duration-300">
+                              ✓ Đã khám phá
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-black/60 text-slate-200 backdrop-blur-md border border-white/20">
+                              ⏱️ Lướt 3s nhận %
+                            </span>
+                          )}
                         </div>
-                      )}
 
-                      {item.orderingPhrase && (
-                        <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-sumi-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
-                          <div className="min-w-0">
-                            <p className="text-[10px] uppercase font-bold text-slate-400">Cách gọi món tại quán:</p>
-                            <p className="font-jp text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
-                              {item.orderingPhrase}
-                            </p>
+                        {item.imageUrl ? (
+                          <Image
+                            src={item.imageUrl}
+                            alt={item.name}
+                            fill
+                            unoptimized
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-6xl">
+                            {item.icon}
                           </div>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              playChimeSound();
-                              speakJapanese(item.orderingPhrase || item.nameJa || item.name);
-                            }}
-                            title="Phát âm tiếng Nhật"
-                            className="p-1.5 rounded-lg bg-white dark:bg-sumi-800 hover:bg-sakura-50 text-sakura-600 dark:text-sakura-400 transition shrink-0 border border-slate-200 dark:border-slate-700"
-                          >
-                            🔊
-                          </button>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                        <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between text-white">
+                          <div>
+                            <p className="font-jp font-black text-lg drop-shadow-md text-amber-300">
+                              {item.nameJa || item.name}
+                            </p>
+                            <p className="font-bold text-sm drop-shadow-md">{item.name}</p>
+                          </div>
+                          <span className="text-2xl drop-shadow-md bg-white/20 backdrop-blur-md p-1.5 rounded-xl">
+                            {item.icon}
+                          </span>
                         </div>
-                      )}
+                      </div>
 
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        className="w-full mt-2 text-xs font-bold"
-                        onClick={() =>
-                          openDetail(
-                            {
-                              type: "Món ngon trứ danh",
-                              title: item.name,
-                              titleJa: item.nameJa,
-                              imageUrl: item.imageUrl,
-                              icon: item.icon,
-                              description: item.desc,
-                              significance: item.taste,
-                              extraInfo: item.orderingPhrase ? `Mẫu câu gọi món: "${item.orderingPhrase}"` : undefined,
-                              audioText: item.nameJa || item.name,
-                              tag: "Ẩm thực",
-                            },
-                            `food-${idx}`
-                          )
-                        }
-                      >
-                        Khám phá câu chuyện món ăn 📖
-                      </Button>
-                    </div>
-                  </Card>
-                ))}
+                      {/* Card Content */}
+                      <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                          {item.desc}
+                        </p>
+
+                        {item.taste && (
+                          <div className="p-2.5 rounded-xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200/70 dark:border-amber-900/40 text-[11px] text-amber-900 dark:text-amber-200 leading-snug">
+                            <strong className="font-bold text-amber-700 dark:text-amber-400 mr-1">Vị đặc trưng:</strong>
+                            {item.taste}
+                          </div>
+                        )}
+
+                        {item.orderingPhrase && (
+                          <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-sumi-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
+                            <div className="min-w-0">
+                              <p className="text-[10px] uppercase font-bold text-slate-400">Cách gọi món tại quán:</p>
+                              <p className="font-jp text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+                                {item.orderingPhrase}
+                              </p>
+                            </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                playChimeSound();
+                                speakJapanese(item.orderingPhrase || item.nameJa || item.name);
+                                markExplored(exploreId, true);
+                              }}
+                              title="Phát âm tiếng Nhật"
+                              className="p-1.5 rounded-lg bg-white dark:bg-sumi-800 hover:bg-sakura-50 text-sakura-600 dark:text-sakura-400 transition shrink-0 border border-slate-200 dark:border-slate-700"
+                            >
+                              🔊
+                            </button>
+                          </div>
+                        )}
+
+                        <Button
+                          variant={isExplored ? "secondary" : "sakura"}
+                          size="sm"
+                          className="w-full mt-2 text-xs font-bold"
+                          onClick={() =>
+                            openDetail(
+                              {
+                                type: "Món ngon trứ danh",
+                                title: item.name,
+                                titleJa: item.nameJa,
+                                imageUrl: item.imageUrl,
+                                icon: item.icon,
+                                description: item.desc,
+                                significance: item.taste,
+                                extraInfo: item.orderingPhrase ? `Mẫu câu gọi món: "${item.orderingPhrase}"` : undefined,
+                                audioText: item.nameJa || item.name,
+                                tag: "Ẩm thực",
+                              },
+                              exploreId
+                            )
+                          }
+                        >
+                          Khám phá câu chuyện món ăn 📖
+                        </Button>
+                      </div>
+                    </Card>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -627,7 +786,10 @@ export function Japanese3DRoom({
               {data.history ? (
                 <>
                   {/* Historical Epoch Summary Banner */}
-                  <div className="p-6 rounded-3xl bg-gradient-to-br from-indigo-50 via-white to-slate-50 dark:from-sumi-900 dark:via-sumi-950 dark:to-indigo-950/40 border border-indigo-200/80 dark:border-indigo-900/50 shadow-sm space-y-4">
+                  <div
+                    data-explore-id="hist-epoch"
+                    className="p-6 rounded-3xl bg-gradient-to-br from-indigo-50 via-white to-slate-50 dark:from-sumi-900 dark:via-sumi-950 dark:to-indigo-950/40 border border-indigo-200/80 dark:border-indigo-900/50 shadow-sm space-y-4 relative"
+                  >
                     <div className="flex flex-wrap items-center justify-between gap-3 border-b border-indigo-100 dark:border-indigo-900/40 pb-3">
                       <div>
                         <Badge variant="fuji" className="font-bold text-xs uppercase tracking-wider mb-1">
@@ -659,43 +821,60 @@ export function Japanese3DRoom({
                     </h4>
 
                     <div className="relative border-l-2 border-indigo-200 dark:border-indigo-900 ml-4 pl-6 space-y-6">
-                      {data.history.milestones.map((m, i) => (
-                        <div key={i} className="relative group">
-                          {/* Dot marker */}
-                          <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-indigo-600 border-4 border-white dark:border-sumi-950 shadow-sm group-hover:scale-125 transition-transform" />
+                      {data.history.milestones.map((m, i) => {
+                        const exploreId = `hist-${i}`;
+                        const isExplored = exploredItems.has(exploreId);
 
-                          <Card
-                            hover
-                            className="p-5 border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-sumi-900/90 space-y-2 cursor-pointer"
-                            onClick={() =>
-                              openDetail(
-                                {
-                                  type: "Cột mốc lịch sử",
-                                  title: m.title,
-                                  subtitle: m.year,
-                                  description: m.desc,
-                                  icon: "📜",
-                                  tag: "Lịch sử",
-                                },
-                                `hist-${i}`
-                              )
-                            }
-                          >
-                            <div className="flex items-center justify-between gap-2 flex-wrap">
-                              <span className="text-xs font-black px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
-                                {m.year}
-                              </span>
-                              <span className="text-[11px] text-slate-400">Bấm để đọc chi tiết →</span>
-                            </div>
-                            <h5 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white">
-                              {m.title}
-                            </h5>
-                            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                              {m.desc}
-                            </p>
-                          </Card>
-                        </div>
-                      ))}
+                        return (
+                          <div key={i} className="relative group">
+                            {/* Dot marker */}
+                            <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-indigo-600 border-4 border-white dark:border-sumi-950 shadow-sm group-hover:scale-125 transition-transform" />
+
+                            <Card
+                              data-explore-id={exploreId}
+                              hover
+                              className={`p-5 border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-sumi-900/90 space-y-2 cursor-pointer transition-all duration-300 ${
+                                isExplored ? "border-emerald-300/80 dark:border-emerald-800/80" : ""
+                              }`}
+                              onClick={() =>
+                                openDetail(
+                                  {
+                                    type: "Cột mốc lịch sử",
+                                    title: m.title,
+                                    subtitle: m.year,
+                                    description: m.desc,
+                                    icon: "📜",
+                                    tag: "Lịch sử",
+                                  },
+                                  exploreId
+                                )
+                              }
+                            >
+                              <div className="flex items-center justify-between gap-2 flex-wrap">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs font-black px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                                    {m.year}
+                                  </span>
+                                  {isExplored ? (
+                                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+                                      ✓ Đã xem
+                                    </span>
+                                  ) : (
+                                    <span className="text-[10px] font-medium text-slate-400">⏱️ Lướt 3s</span>
+                                  )}
+                                </div>
+                                <span className="text-[11px] text-slate-400">Bấm để đọc chi tiết →</span>
+                              </div>
+                              <h5 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white">
+                                {m.title}
+                              </h5>
+                              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                {m.desc}
+                              </p>
+                            </Card>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </>
@@ -722,56 +901,77 @@ export function Japanese3DRoom({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {data.scenicPhotos.map((photo, i) => (
-                  <Card
-                    key={i}
-                    hover
-                    className="overflow-hidden p-0 border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-sumi-900/90 flex flex-col group cursor-pointer"
-                    onClick={() =>
-                      openDetail(
-                        {
-                          type: "Danh thắng biểu tượng",
-                          title: photo.caption,
-                          subtitle: photo.location,
-                          imageUrl: photo.url,
-                          description: photo.description || photo.caption,
-                          icon: "⛩️",
-                          tag: "Danh thắng",
-                        },
-                        `landmark-${i}`
-                      )
-                    }
-                  >
-                    <div className="relative aspect-[16/11] bg-slate-100 dark:bg-sumi-800 overflow-hidden">
-                      <Image
-                        src={photo.url}
-                        alt={photo.caption}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                      {photo.location && (
-                        <div className="absolute bottom-3 left-3 text-white text-xs font-medium flex items-center gap-1">
-                          <span>📍</span> {photo.location}
+                {data.scenicPhotos.map((photo, i) => {
+                  const exploreId = `landmark-${i}`;
+                  const isExplored = exploredItems.has(exploreId);
+
+                  return (
+                    <Card
+                      key={i}
+                      data-explore-id={exploreId}
+                      hover
+                      className={`overflow-hidden p-0 border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-sumi-900/90 flex flex-col group cursor-pointer transition-all duration-300 ${
+                        isExplored ? "border-emerald-300/80 dark:border-emerald-800/80" : ""
+                      }`}
+                      onClick={() =>
+                        openDetail(
+                          {
+                            type: "Danh thắng biểu tượng",
+                            title: photo.caption,
+                            subtitle: photo.location,
+                            imageUrl: photo.url,
+                            description: photo.description || photo.caption,
+                            icon: "⛩️",
+                            tag: "Danh thắng",
+                          },
+                          exploreId
+                        )
+                      }
+                    >
+                      <div className="relative aspect-[16/11] bg-slate-100 dark:bg-sumi-800 overflow-hidden">
+                        <div className="absolute top-3 left-3 z-10">
+                          {isExplored ? (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-600/95 text-white backdrop-blur-md shadow-md">
+                              ✓ Đã xem
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-black/60 text-slate-200 backdrop-blur-md border border-white/20">
+                              ⏱️ Lướt 3s
+                            </span>
+                          )}
                         </div>
-                      )}
-                    </div>
-                    <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h5 className="font-bold text-sm text-slate-900 dark:text-white">{photo.caption}</h5>
-                        {photo.description && (
-                          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed line-clamp-3">
-                            {photo.description}
-                          </p>
+
+                        <Image
+                          src={photo.url}
+                          alt={photo.caption}
+                          fill
+                          unoptimized
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                        {photo.location && (
+                          <div className="absolute bottom-3 left-3 text-white text-xs font-medium flex items-center gap-1">
+                            <span>📍</span> {photo.location}
+                          </div>
                         )}
                       </div>
-                      <span className="text-[11px] font-bold text-sakura-600 dark:text-sakura-400 pt-1">
-                        Xem ảnh lớn & tư liệu →
-                      </span>
-                    </div>
-                  </Card>
-                ))}
+                      <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
+                        <div>
+                          <h5 className="font-bold text-sm text-slate-900 dark:text-white">{photo.caption}</h5>
+                          {photo.description && (
+                            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed line-clamp-3">
+                              {photo.description}
+                            </p>
+                          )}
+                        </div>
+                        <span className="text-[11px] font-bold text-sakura-600 dark:text-sakura-400 pt-1">
+                          Xem ảnh lớn & tư liệu →
+                        </span>
+                      </div>
+                    </Card>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -791,60 +991,81 @@ export function Japanese3DRoom({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {data.culturalArtifacts.map((art, i) => (
-                  <Card
-                    key={i}
-                    hover
-                    className="overflow-hidden p-0 border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-sumi-900/90 flex flex-col group cursor-pointer"
-                    onClick={() =>
-                      openDetail(
-                        {
-                          type: "Bảo vật di sản",
-                          title: art.title,
-                          titleJa: art.titleJa,
-                          imageUrl: art.imageUrl,
-                          icon: art.icon,
-                          description: art.desc,
-                          significance: art.significance,
-                          audioText: art.titleJa,
-                          tag: "Bảo vật",
-                        },
-                        `art-${i}`
-                      )
-                    }
-                  >
-                    {art.imageUrl && (
-                      <div className="relative aspect-[16/10] bg-slate-100 dark:bg-sumi-800 overflow-hidden">
-                        <Image
-                          src={art.imageUrl}
-                          alt={art.title}
-                          fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        <span className="absolute top-3 right-3 text-2xl p-1.5 rounded-xl bg-white/30 backdrop-blur-md shadow-sm">
-                          {art.icon}
-                        </span>
-                      </div>
-                    )}
-                    <div className="p-5 space-y-2 flex-1 flex flex-col justify-between">
-                      <div>
-                        <p className="font-jp text-xs font-bold text-amber-600 dark:text-amber-400">
-                          {art.titleJa}
-                        </p>
-                        <h5 className="font-bold text-sm text-slate-900 dark:text-white">{art.title}</h5>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed line-clamp-3">
-                          {art.desc}
-                        </p>
-                      </div>
+                {data.culturalArtifacts.map((art, i) => {
+                  const exploreId = `art-${i}`;
+                  const isExplored = exploredItems.has(exploreId);
 
-                      <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-sumi-950 border border-slate-200 dark:border-slate-800 text-[11px] text-slate-500">
-                        <strong className="text-slate-700 dark:text-slate-300">Ý nghĩa:</strong>{" "}
-                        {art.significance}
+                  return (
+                    <Card
+                      key={i}
+                      data-explore-id={exploreId}
+                      hover
+                      className={`overflow-hidden p-0 border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-sumi-900/90 flex flex-col group cursor-pointer transition-all duration-300 ${
+                        isExplored ? "border-emerald-300/80 dark:border-emerald-800/80" : ""
+                      }`}
+                      onClick={() =>
+                        openDetail(
+                          {
+                            type: "Bảo vật di sản",
+                            title: art.title,
+                            titleJa: art.titleJa,
+                            imageUrl: art.imageUrl,
+                            icon: art.icon,
+                            description: art.desc,
+                            significance: art.significance,
+                            audioText: art.titleJa,
+                            tag: "Bảo vật",
+                          },
+                          exploreId
+                        )
+                      }
+                    >
+                      {art.imageUrl && (
+                        <div className="relative aspect-[16/10] bg-slate-100 dark:bg-sumi-800 overflow-hidden">
+                          <div className="absolute top-3 left-3 z-10">
+                            {isExplored ? (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-600/95 text-white backdrop-blur-md shadow-md">
+                                ✓ Đã xem
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-black/60 text-slate-200 backdrop-blur-md border border-white/20">
+                                ⏱️ Lướt 3s
+                              </span>
+                            )}
+                          </div>
+
+                          <Image
+                            src={art.imageUrl}
+                            alt={art.title}
+                            fill
+                            unoptimized
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                          <span className="absolute top-3 right-3 text-2xl p-1.5 rounded-xl bg-white/30 backdrop-blur-md shadow-sm">
+                            {art.icon}
+                          </span>
+                        </div>
+                      )}
+                      <div className="p-5 space-y-2 flex-1 flex flex-col justify-between">
+                        <div>
+                          <p className="font-jp text-xs font-bold text-amber-600 dark:text-amber-400">
+                            {art.titleJa}
+                          </p>
+                          <h5 className="font-bold text-sm text-slate-900 dark:text-white">{art.title}</h5>
+                          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed line-clamp-3">
+                            {art.desc}
+                          </p>
+                        </div>
+
+                        <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-sumi-950 border border-slate-200 dark:border-slate-800 text-[11px] text-slate-500">
+                          <strong className="text-slate-700 dark:text-slate-300">Ý nghĩa:</strong>{" "}
+                          {art.significance}
+                        </div>
                       </div>
-                    </div>
-                  </Card>
-                ))}
+                    </Card>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -864,33 +1085,50 @@ export function Japanese3DRoom({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {(data.culturalEtiquette || []).map((etq, i) => (
-                  <Card
-                    key={i}
-                    hover
-                    className="p-5 border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-sumi-900/90 flex items-start gap-4 cursor-pointer"
-                    onClick={() =>
-                      openDetail(
-                        {
-                          type: "Nghi thức văn hóa",
-                          title: etq.title,
-                          icon: etq.icon,
-                          description: etq.desc,
-                          tag: "Nghi thức",
-                        },
-                        `etq-${i}`
-                      )
-                    }
-                  >
-                    <div className="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800 flex items-center justify-center text-2xl shrink-0">
-                      {etq.icon}
-                    </div>
-                    <div className="space-y-1 flex-1">
-                      <h5 className="font-bold text-sm text-slate-900 dark:text-white">{etq.title}</h5>
-                      <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{etq.desc}</p>
-                    </div>
-                  </Card>
-                ))}
+                {(data.culturalEtiquette || []).map((etq, i) => {
+                  const exploreId = `etq-${i}`;
+                  const isExplored = exploredItems.has(exploreId);
+
+                  return (
+                    <Card
+                      key={i}
+                      data-explore-id={exploreId}
+                      hover
+                      className={`p-5 border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-sumi-900/90 flex items-start gap-4 cursor-pointer transition-all duration-300 ${
+                        isExplored ? "border-emerald-300/80 dark:border-emerald-800/80" : ""
+                      }`}
+                      onClick={() =>
+                        openDetail(
+                          {
+                            type: "Nghi thức văn hóa",
+                            title: etq.title,
+                            icon: etq.icon,
+                            description: etq.desc,
+                            tag: "Nghi thức",
+                          },
+                          exploreId
+                        )
+                      }
+                    >
+                      <div className="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800 flex items-center justify-center text-2xl shrink-0">
+                        {etq.icon}
+                      </div>
+                      <div className="space-y-1 flex-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <h5 className="font-bold text-sm text-slate-900 dark:text-white">{etq.title}</h5>
+                          {isExplored ? (
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+                              ✓ Đã xem
+                            </span>
+                          ) : (
+                            <span className="text-[10px] text-slate-400">⏱️ Lướt 3s</span>
+                          )}
+                        </div>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{etq.desc}</p>
+                      </div>
+                    </Card>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -910,46 +1148,63 @@ export function Japanese3DRoom({
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {data.language.map((lang, i) => (
-                  <Card
-                    key={i}
-                    hover
-                    className="p-5 border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-sumi-900/90 space-y-3 flex flex-col justify-between"
-                  >
-                    <div className="space-y-1.5">
-                      <div className="flex items-start justify-between gap-2">
-                        <p className="font-jp font-black text-base text-slate-900 dark:text-white leading-snug">
-                          {lang.japanese}
-                        </p>
-                        <button
-                          onClick={() => {
-                            playChimeSound();
-                            speakJapanese(lang.japanese);
-                            markExplored(`lng-${i}`);
-                          }}
-                          title="Nghe phát âm"
-                          className="p-2 rounded-xl bg-slate-100 hover:bg-sakura-50 text-sakura-600 dark:bg-sumi-800 dark:hover:bg-sumi-700 dark:text-sakura-400 transition shrink-0 border border-slate-200 dark:border-slate-700 active:scale-95"
-                        >
-                          🔊
-                        </button>
-                      </div>
-                      <p className="text-xs font-semibold text-rose-600 dark:text-rose-400 italic">
-                        {lang.romaji}
-                      </p>
-                    </div>
+                {data.language.map((lang, i) => {
+                  const exploreId = `lng-${i}`;
+                  const isExplored = exploredItems.has(exploreId);
 
-                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300">
-                      <strong>Ý nghĩa:</strong> {lang.meaning}
-                    </div>
-                  </Card>
-                ))}
+                  return (
+                    <Card
+                      key={i}
+                      data-explore-id={exploreId}
+                      hover
+                      className={`p-5 border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-sumi-900/90 space-y-3 flex flex-col justify-between transition-all duration-300 ${
+                        isExplored ? "border-emerald-300/80 dark:border-emerald-800/80" : ""
+                      }`}
+                    >
+                      <div className="space-y-1.5">
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="font-jp font-black text-base text-slate-900 dark:text-white leading-snug">
+                            {lang.japanese}
+                          </p>
+                          <div className="flex items-center gap-1.5">
+                            {isExplored ? (
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+                                ✓ Đã học
+                              </span>
+                            ) : (
+                              <span className="text-[10px] text-slate-400">⏱️ Lướt 3s</span>
+                            )}
+                            <button
+                              onClick={() => {
+                                playChimeSound();
+                                speakJapanese(lang.japanese);
+                                markExplored(exploreId, true);
+                              }}
+                              title="Nghe phát âm"
+                              className="p-2 rounded-xl bg-slate-100 hover:bg-sakura-50 text-sakura-600 dark:bg-sumi-800 dark:hover:bg-sumi-700 dark:text-sakura-400 transition shrink-0 border border-slate-200 dark:border-slate-700 active:scale-95"
+                            >
+                              🔊
+                            </button>
+                          </div>
+                        </div>
+                        <p className="text-xs font-semibold text-rose-600 dark:text-rose-400 italic">
+                          {lang.romaji}
+                        </p>
+                      </div>
+
+                      <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300">
+                        <strong>Ý nghĩa:</strong> {lang.meaning}
+                      </div>
+                    </Card>
+                  );
+                })}
               </div>
             </div>
           )}
         </main>
 
         {/* ── FOOTER ACTIONS ────────────────────────────────────────────────── */}
-        <footer className="glass-panel px-6 py-4 border-t border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <footer className="glass-panel px-6 py-4 border-t border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white/95 dark:bg-sumi-900/95 backdrop-blur-md">
           <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
             <span>Trạng thái chặng:</span>
             {status === "COMPLETED" ? (
@@ -958,7 +1213,7 @@ export function Japanese3DRoom({
               </Badge>
             ) : status === "IN_PROGRESS" ? (
               <Badge variant="sakura" className="font-bold">
-                Đang khám phá
+                Đang khám phá ({exploredPercent}%)
               </Badge>
             ) : (
               <Badge variant="amber" className="font-bold">
@@ -1002,6 +1257,7 @@ export function Japanese3DRoom({
                   src={detailItem.imageUrl}
                   alt={detailItem.title}
                   fill
+                  unoptimized
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover"
                 />

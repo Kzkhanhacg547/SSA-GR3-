@@ -47,6 +47,7 @@ export async function POST(req: Request) {
   return NextResponse.json({
     success: true,
     message: "Mã xác thực OTP đã được gửi đến email của bạn.",
-    devCode: result.devCode,
+    // devCode only exposed in test environment (NODE_ENV=test), never in development or production
+    ...(process.env.NODE_ENV === "test" && result.devCode ? { devCode: result.devCode } : {}),
   });
 }

@@ -9,7 +9,7 @@ import { type EnrichedReviewItem } from "@/lib/review/resolveReviewItem";
 
 export function ReviewClient({ initial }: { initial: EnrichedReviewItem[] }) {
   const router = useRouter();
-  const { playClick, playCorrect, playFanfare, showToast } = useSoundAndTheme();
+  const { playClick, playCorrect, playIncorrect, playFanfare, showToast, speak } = useSoundAndTheme();
 
   const [items, setItems] = useState<EnrichedReviewItem[]>(initial);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -18,18 +18,6 @@ export function ReviewClient({ initial }: { initial: EnrichedReviewItem[] }) {
   const [showExplanation, setShowExplanation] = useState(false);
 
   const currentItem = items[currentIndex];
-
-  const speak = (text: string) => {
-    try {
-      if ("speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = "ja-JP";
-        u.rate = 0.85;
-        window.speechSynthesis.speak(u);
-      }
-    } catch {}
-  };
 
   const getMemoryStage = (reps: number, interval: number) => {
     if (reps >= 6 || interval >= 21) {

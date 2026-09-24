@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { NihonQuestLogo } from "@/components/NihonQuestLogo";
 
 function PasswordStrength({ password }: { password: string }) {
   const score = [
@@ -46,7 +47,6 @@ export default function RegisterPage() {
   const [step, setStep] = useState<1 | 2>(1);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [devCode, setDevCode] = useState<string | null>(null);
 
   // Form inputs
   const [displayName, setDisplayName] = useState("");
@@ -99,10 +99,6 @@ export default function RegisterPage() {
         return;
       }
 
-      if (data.devCode) {
-        setDevCode(data.devCode);
-        setOtpCode(data.devCode); // Auto-fill in dev mode for convenience
-      }
       setStep(2);
       setResendCooldown(60);
     } catch {
@@ -130,10 +126,7 @@ export default function RegisterPage() {
       if (!res.ok) {
         setError(data.error || "Không thể gửi lại mã.");
       } else {
-        if (data.devCode) {
-          setDevCode(data.devCode);
-          setOtpCode(data.devCode);
-        }
+        setOtpCode("");
         setResendCooldown(60);
       }
     } catch {
@@ -197,14 +190,14 @@ export default function RegisterPage() {
 
       <div className="w-full max-w-md relative z-10">
         {/* Logo */}
-        <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-sakura-500 via-rose-500 to-amber-500 shadow-xl shadow-sakura-500/40 mb-3">
-            <span className="text-xl font-black text-white">日</span>
-          </div>
-          <h1 className="text-2xl font-black text-slate-900 dark:text-white">
+        <div className="text-center mb-6 flex flex-col items-center">
+          <Link href="/" className="inline-block mb-2 hover:scale-105 transition-transform">
+            <NihonQuestLogo size="lg" />
+          </Link>
+          <h1 className="text-2xl font-black text-slate-900 dark:text-white mt-1">
             {step === 1 ? "Tạo Tài Khoản" : "Xác Thực Email"}
           </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
+          <p className="text-slate-500 dark:text-slate-400 text-xs mt-1">
             {step === 1
               ? "Bắt đầu hành trình tiếng Nhật của bạn hôm nay！🌸"
               : `Mã OTP đã được gửi đến ${email}`}
@@ -213,14 +206,6 @@ export default function RegisterPage() {
 
         {/* Card */}
         <div className="bg-white/90 dark:bg-sumi-950/90 backdrop-blur-xl rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-2xl p-6 sm:p-8 space-y-5">
-          {devCode && (
-            <div className="rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 p-3.5 text-xs text-amber-800 dark:text-amber-200">
-              <span className="font-bold">🧪 Dev Mode Simulator:</span> Mã OTP là{" "}
-              <code className="px-2 py-0.5 rounded bg-amber-200 dark:bg-amber-900 font-mono font-black text-sm text-amber-950 dark:text-amber-100">
-                {devCode}
-              </code>
-            </div>
-          )}
 
           {step === 1 ? (
             /* STEP 1: Registration info */

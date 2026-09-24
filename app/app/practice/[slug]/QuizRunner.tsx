@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Card, Button, Badge } from "@/components/ui";
 import { useSoundAndTheme } from "@/components/SoundAndThemeContext";
@@ -97,7 +97,7 @@ export function QuizRunner({
   nextLesson: NextLesson | null;
 }) {
   const router = useRouter();
-  const { playClick, playCorrect, playIncorrect, playFanfare, showToast } = useSoundAndTheme();
+  const { playClick, playCorrect, playIncorrect, playFanfare, showToast, speak } = useSoundAndTheme();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string>("");
@@ -112,16 +112,23 @@ export function QuizRunner({
   const totalQuestions = lesson.exercises.length;
   const currentExercise = lesson.exercises[currentIndex];
 
+  const displayedOptions = useMemo(() => {
+    if (!currentExercise?.options || currentExercise.options.length === 0) return [];
+    const list = [...currentExercise.options];
+    // Fisher-Yates random shuffle for fair distribution across A, B, C, D
+    for (let i = list.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [list[i], list[j]] = [list[j], list[i]];
+    }
+    const labels = ["A", "B", "C", "D", "E", "F"];
+    return list.map((opt, idx) => ({
+      ...opt,
+      displayLabel: labels[idx] ?? String.fromCharCode(65 + idx),
+    }));
+  }, [currentExercise?.id, currentIndex]);
+
   const speakText = (text: string) => {
-    try {
-      if ("speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = "ja-JP";
-        u.rate = 0.85;
-        window.speechSynthesis.speak(u);
-      }
-    } catch {}
+    speak(text);
   };
 
   const handleSelectOption = useCallback((text: string) => {
@@ -223,11 +230,11 @@ export function QuizRunner({
 
       if (!isFinished && currentExercise) {
         if (!hasChecked) {
-          if (currentExercise.options && currentExercise.options.length > 0) {
+          if (displayedOptions && displayedOptions.length > 0) {
             const keyNum = parseInt(e.key, 10);
-            if (keyNum >= 1 && keyNum <= currentExercise.options.length) {
+            if (keyNum >= 1 && keyNum <= displayedOptions.length) {
               e.preventDefault();
-              handleSelectOption(currentExercise.options[keyNum - 1].text);
+              handleSelectOption(displayedOptions[keyNum - 1].text);
             }
           }
           if (e.key === "Enter" && selectedAnswer.trim()) {
@@ -408,9 +415,9 @@ export function QuizRunner({
         </div>
 
         {/* Options grid */}
-        {currentExercise.options.length > 0 ? (
+        {displayedOptions.length > 0 ? (
           <div className="grid gap-2.5 pt-2">
-            {currentExercise.options.map((opt, idx) => {
+            {displayedOptions.map((opt: Option & { displayLabel?: string }, idx: number) => {
               const isSelected = selectedAnswer === opt.text;
               let optionStyle =
                 "border-slate-200 dark:border-slate-800 bg-white dark:bg-sumi-900 hover:border-slate-300 dark:hover:border-slate-700";
@@ -434,13 +441,13 @@ export function QuizRunner({
 
               return (
                 <button
-                  key={opt.id}
+                  key={opt.id || idx}
                   disabled={hasChecked}
                   onClick={() => handleSelectOption(opt.text)}
                   className={`flex items-center gap-3 w-full p-4 rounded-2xl border-2 text-left transition-all relative ${optionStyle}`}
                 >
                   <span className="w-7 h-7 rounded-xl bg-slate-100 dark:bg-sumi-800 flex items-center justify-center text-xs font-black text-slate-700 dark:text-slate-300 shrink-0">
-                    {opt.label || idx + 1}
+                    {opt.displayLabel}
                   </span>
                   <span className="text-base font-bold flex-1">{opt.text}</span>
                   {hasChecked && opt.text.trim().toLowerCase() === currentExercise.correctAnswer.trim().toLowerCase() && (

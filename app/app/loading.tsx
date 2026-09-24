@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function AppLoading() {
   const PHRASES = [
     "頑張れ！— Cố lên nào！",
@@ -11,20 +13,30 @@ export default function AppLoading() {
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-slate-50 via-sakura-50/20 to-fuji-50/10 dark:from-slate-950 dark:via-sumi-950 dark:to-slate-950">
-      {/* Torii Gate Animation */}
+      {/* New Anime/Japanese Gaming Style App Loading Logo */}
       <div className="relative mb-8">
-        <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-sakura-500 via-rose-500 to-amber-500 shadow-2xl shadow-sakura-500/40 flex items-center justify-center animate-pulse">
-          <span className="text-3xl font-black text-white">⛩️</span>
+        <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl overflow-hidden border-2 border-sakura-400/50 shadow-2xl shadow-sakura-500/50 relative flex items-center justify-center animate-pulse">
+          <Image
+            src="/logo.jpg"
+            alt="Nihon Quest Loading"
+            width={112}
+            height={112}
+            className="w-full h-full object-cover"
+          />
         </div>
-        {/* Spinning ring */}
-        <div className="absolute -inset-2 rounded-[28px] border-2 border-sakura-300/50 dark:border-sakura-800/50 animate-spin" style={{ animationDuration: "3s" }} />
-        <div className="absolute -inset-4 rounded-[36px] border border-sakura-200/30 dark:border-sakura-900/30 animate-spin" style={{ animationDuration: "5s", animationDirection: "reverse" }} />
+        {/* Spinning Japanese Neon Ring Highlights */}
+        <div className="absolute -inset-3 rounded-[36px] border-2 border-sakura-400/60 dark:border-sakura-500/60 animate-spin" style={{ animationDuration: "3s" }} />
+        <div className="absolute -inset-5 rounded-[44px] border border-amber-400/40 dark:border-amber-500/40 animate-spin" style={{ animationDuration: "6s", animationDirection: "reverse" }} />
       </div>
 
-      {/* Brand */}
-      <div className="text-center space-y-2 mb-6">
-        <h2 className="font-black text-xl text-slate-900 dark:text-white">Nihon Quest</h2>
-        <p className="text-sm text-slate-500 dark:text-slate-400">Đang tải...</p>
+      {/* Brand Header */}
+      <div className="text-center space-y-1 mb-6">
+        <h2 className="font-black text-2xl tracking-tight bg-gradient-to-r from-sakura-600 via-rose-600 to-amber-500 bg-clip-text text-transparent">
+          Nihon Quest
+        </h2>
+        <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
+          日本 • Đang tải ứng dụng...
+        </p>
       </div>
 
       {/* Japanese phrase */}

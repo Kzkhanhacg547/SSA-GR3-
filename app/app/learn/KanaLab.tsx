@@ -59,7 +59,7 @@ export function KanaLab({ kana, practiced }: { kana: KanaRow[]; practiced: strin
   const [audioSpeed, setAudioSpeed] = useState<number>(1.0);
   const [writingTarget, setWritingTarget] = useState<KanaRow | null>(null);
   const [doneSet, setDoneSet] = useState<Set<string>>(new Set(practiced));
-  const { playClick, playCorrect, showToast } = useSoundAndTheme();
+  const { playClick, playCorrect, showToast, speak: globalSpeak } = useSoundAndTheme();
 
   // Filter current kana category
   const activeKanaList = useMemo(() => {
@@ -93,13 +93,7 @@ export function KanaLab({ kana, practiced }: { kana: KanaRow[]; practiced: strin
 
   const speak = (character: string) => {
     try {
-      if ("speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(character);
-        u.lang = "ja-JP";
-        u.rate = audioSpeed;
-        window.speechSynthesis.speak(u);
-      }
+      globalSpeak(character, audioSpeed);
     } catch {}
   };
 

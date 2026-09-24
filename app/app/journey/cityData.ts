@@ -64,7 +64,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         nameJa: "江戸前握り寿司",
         desc: "Sushi truyền thống nguồn gốc thời Edo với hải sản tươi ngon đánh bắt tại vịnh Tokyo đặt trên nắm cơm giấm ấm nóng.",
         icon: "🍣",
-        imageUrl: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=700&q=80",
+        imageUrl: "https://itamaesushi-shinbashi.eeat.jp/wp-content/data/itamaesushi-shinbashi/9ac7cc397a131ec96623ea304e866e98-2.jpg",
         taste: "Vị ngọt thanh tự nhiên của cá hồi, cá ngừ hòa quyện giấm đỏ Akazu và wasabi cay nồng ấm.",
         orderingPhrase: "おまかせでお願いします (Omakase de onegaishimasu - Xin nhờ đầu bếp chọn món giúp)"
       },
@@ -73,7 +73,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         nameJa: "月島もんじゃ焼き",
         desc: "Bánh xèo bột lỏng nướng xèo xèo trên bàn sắt teppan tại khu phố cổ Tsukishima, dùng xẻng nhỏ hagashi cạo ăn nóng hổi.",
         icon: "🥢",
-        imageUrl: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=700&q=80",
+        imageUrl: "https://en.ichimileinc.com/wp-content/uploads/2025/02/monjayaki-food-tsukishima.jpg",
         taste: "Đáy bánh xém giòn thơm lừng mùi bắp cải, bạch tuộc, phô mai và tôm khô dẻo ngậy.",
         orderingPhrase: "もんじゃ焼きを二人前ください (Monjayaki o ninmae kudasai - Cho 2 phần Monjayaki)"
       },
@@ -91,7 +91,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         nameJa: "浅草天ぷら蕎麦",
         desc: "Mì kiều mạch soba nước dùng dashi thanh khiết ăn kèm tôm sú chiên tempura vàng ươm giòn rụm theo phong cách phố cổ Asakusa.",
         icon: "🍤",
-        imageUrl: "https://rimage.gnst.jp/livejapan.com/public/article/detail/a/00/03/a0003474/img/basic/a0003474_main.jpg",
+        imageUrl: "https://www.jal.co.jp/vn/vn/guide-to-japan/destinations/articles/tokyo/guide-to-soba/_jcr_content/root/responsivegrid/sectioncontainer_cop/image_2047275859_cop_293197973.coreimg.jpeg/1690511771973.jpeg",
         taste: "Lớp vỏ tempura giòn tan ngấm nhẹ nước tương ngọt dịu dashi và hạt kiều mạch thơm mộc mạc.",
         orderingPhrase: "天ぷら蕎麦を温かいので (Tempura soba o atatakai no de - Cho tôi mì soba tôm nóng)"
       }
@@ -100,19 +100,19 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
     stampJa: "東京駅・記念印",
     scenicPhotos: [
       {
-        url: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1200&q=80",
+        url: "https://rimage.gnst.jp/livejapan.com/public/article/detail/a/00/00/a0000146/img/basic/a0000146_main.jpg",
         caption: "Tháp Tokyo rực sáng giữa đường chân trời đêm 🗼",
         location: "Minato-ku, Tokyo",
         description: "Ngọn tháp thép cao 332.9m xây dựng năm 1958, lấy cảm hứng từ tháp Eiffel với hai sắc đỏ trắng bảo hộ bầu trời thủ đô."
       },
       {
-        url: "https://images.unsplash.com/photo-1528164344705-47542687000d?w=1200&q=80",
+        url: "https://encrypted-tbn3.gstatic.com/licensed-image?q=tbn:ANd9GcRh0StbctSIT986CGLpNIjznQgDJXrIvwSgTPT18d1SzQpYDFKgiR03zftrZKCtK4D6PQpqZW_JaVi05G4",
         caption: "Đền cổ Senso-ji Asakusa linh thiêng ⛩️",
         location: "Asakusa Taito-ku",
         description: "Ngôi đền Phật giáo cổ nhất Tokyo thành lập năm 645, nơi lưu giữ tinh hoa lễ hội Sanja Matsuri rộn rã."
       },
       {
-        url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200&q=80",
+        url: "https://mia.vn/media/uploads/blog-du-lich/giao-lo-shibuya-2-1729755650.jpg",
         caption: "Ngã tư Shibuya Crossing nhộn nhịp 🚶",
         location: "Shibuya Center Street",
         description: "Giao lộ người đi bộ đông nhất hành tinh, biểu tượng cho nhịp sống hiện đại không bao giờ ngủ."
@@ -129,7 +129,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         title: "Đèn Lồng Đỏ Lớn Cổng Sấm Kaminarimon",
         titleJa: "雷門大提灯 (Kaminarimon Ō-chōchin)",
         icon: "🏮",
-        imageUrl: "https://images.unsplash.com/photo-1528164344705-47542687000d?w=900&q=80",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSvboh-Pm7jBWmDzsWZCxvCMAadbya2wjsvSsA1ZtXXXY_Av8Hw8tWUIA&s=10",
         desc: "Chiếc đèn lồng đỏ khổng lồ nặng gần 700kg treo sừng sững tại cổng sấm đền Senso-ji, được chế tác thủ công từ tre và giấy washi Kyoto.",
         significance: "Biểu tượng bảo hộ bình an, xua đuổi tà khí và cầu nguyện mưa thuận gió hòa cho bách tính thời Edo."
       },
@@ -137,7 +137,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         title: "Kiếm Đạo Katana & Võ Sĩ Đạo Bushido",
         titleJa: "日本刀と武士道 (Nihontō & Bushidō)",
         icon: "⚔️",
-        imageUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=900&q=80",
+        imageUrl: "https://genk.mediacdn.vn/2019/11/23/photo-1-1574481103349400604856.jpg",
         desc: "Nghệ thuật rèn kiếm bậc thầy với thép Tamahagane gấp hàng vạn lần, sở hữu đường vân sóng nước Hamon độc bản và độ sắc bén phi thường.",
         significance: "Linh hồn của giai cấp võ sĩ Samurai, biểu trưng cho Danh dự, Lòng quả cảm và Tinh thần Chính trực bất khuất."
       },
@@ -145,7 +145,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         title: "Văn Hóa Công Nghệ & Manga Akihabara",
         titleJa: "秋葉原オタク文化 (Akihabara Otaku)",
         icon: "🤖",
-        imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900&q=80",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcTdBTRjcus5HQjoXe42PRyB-alZ1kY1DBP0OH-DZ1erbY_sGw6IDg1FqfmsdsD0dlWVa7ZcWoADjQJ7gbI",
         desc: "Thánh địa truyện tranh manga, anime, thiết bị điện tử vi mạch và văn hóa Otaku lan tỏa ảnh hưởng toàn cầu.",
         significance: "Sức mạnh quyền lực mềm văn hóa đương đại đưa hình ảnh nước Nhật hiện đại chinh phục thế hệ trẻ năm châu."
       }
@@ -164,7 +164,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
 
   kyoto: {
     landmark3D: "⛩️",
-    landmarkImage: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&q=80",
+    landmarkImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRqYzB166U4VEYWxGvdXlcVAlB6UWrENJEVvTiU8Leqg&s=10",
     highlights: ["Chùa Vàng Kinkaku-ji phản chiếu trên hồ", "Ngàn cổng Torii đỏ Fushimi Inari", "Rừng trúc Sagano Arashiyama"],
     history: {
       eraName: "Kỷ Nguyên Bình An Heian (794 – 1185) & Cố Đô Ngàn Năm Hoàng Gia",
@@ -204,7 +204,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         nameJa: "京懐石料理",
         desc: "Nghệ thuật ẩm thực cung đình cao cấp gồm nhiều món nhỏ bày biện tinh tế như tác phẩm nghệ thuật, thay đổi theo 4 mùa trong năm.",
         icon: "🍱",
-        imageUrl: "https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=700&q=80",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAIG3XE5_ke5HXF1OteMyee3qABCbiMD_anwZM9yEODUQAfK2l4ER_BmAgqzRV",
         taste: "Vị ngọt thanh thuần khiết từ rau củ Kyoto (Kyo-yasai), nước dùng dashi tảo bẹ Kombu thượng hạng và cá tươi theo mùa.",
         orderingPhrase: "季節の懐石コースをお願いします (Kisetsu no kaiseki kōsu o onegaishimasu - Cho tôi set Kaiseki theo mùa)"
       },
@@ -213,7 +213,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         nameJa: "宇治抹茶と和菓子",
         desc: "Bột trà xanh cao cấp từ những đồn điền Uji cổ xưa đánh sủi bọt ngọc bích sánh mịn, thưởng thức cùng bánh ngọt Wagashi tạo hình hoa lá bốn mùa.",
         icon: "🍵",
-        imageUrl: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=700&q=80",
+        imageUrl: "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQLpdEPbPNAyd3d-IxCMSZjzd70U6JRKJprWVx0WvAnEbJQjmn6wkk0rKiGIqhW",
         taste: "Vị đắng chát êm dịu lúc đầu, đọng lại vị ngọt sâu lắng hậu vị hòa quyện nhân đậu đỏ thanh nhẹ.",
         orderingPhrase: "お抹茶とお菓子のセットをください (Omatcha to okashi no setto o kudasai - Cho tôi set trà Matcha và bánh ngọt)"
       },
@@ -222,7 +222,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         nameJa: "南禅寺湯豆腐",
         desc: "Miếng đậu phụ tươi mượt mà thả trong nồi gang nước dùng tảo bẹ sôi liu riu, món ăn chay dưỡng tâm truyền thống của các nhà sư thiền tông.",
         icon: "🥢",
-        imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700&q=80",
+        imageUrl: "https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcT7LnFB_SMFpqWxQqZKygVn8EoEW5V6gpJHbZih7gHpeSvmAycM_D2BTngmqE-5cqWFdveGw4IOy_n7M1I",
         taste: "Mềm tan béo ngậy vị đậu nành tự nhiên, chấm nước tương Ponzu chua thanh, hành hoa thái chỉ và gừng tươi.",
         orderingPhrase: "湯豆腐御膳を一つお願いします (Yudofu gozen o hitotsu onegaishimasu - Cho một phần cơm đậu phụ Yudofu)"
       },
@@ -231,7 +231,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         nameJa: "京都の上生菓子",
         desc: "Những chiếc bánh ngọt nghệ thuật được nhào nặn thủ công tỉ mỉ mô phỏng nhành hoa anh đào mùa xuân hay lá phong đỏ mùa thu.",
         icon: "🌸",
-        imageUrl: "https://images.unsplash.com/photo-1541832676-9b763b0239ab?w=700&q=80",
+        imageUrl: "https://tse3.mm.bing.net/th/id/OIP.RsSnleEL4_WGya-Zz6oYngHaGI?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
         taste: "Ngọt thanh tao từ đường Wasanbon quý hiếm và đậu trắng Shiro-an mịn màng tan ngay trên đầu lưỡi.",
         orderingPhrase: "お持ち帰り用の和菓子はありますか (Omochikaeri-yō no wagashi wa arimasu ka - Có hộp bánh wagashi mang về không?)"
       }
@@ -240,19 +240,19 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
     stampJa: "京都駅・記念印",
     scenicPhotos: [
       {
-        url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=1200&q=80",
+        url: "https://dulichviet.com.vn/images/bandidau/chua-vang-kinkakuji-bieu-tuong-cua-co-do-kyoto-nhat-ban.jpg",
         caption: "Chùa Vàng Kinkaku-ji rực rỡ bên hồ Gương ⛩️",
         location: "Kinkaku-ji, Kita-ku",
         description: "Ngôi chùa dát vàng ròng lung linh soi bóng mặt hồ tĩnh lặng, biểu tượng vĩnh cửu của văn hóa Muromachi."
       },
       {
-        url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1200&q=80",
+        url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxQMmwSpBzRyzZzKwMZxMNP7MITrfmrI50Gp2R3eP-2GCYrQsh_aS3uIOc&s=10",
         caption: "Đường hầm vạn cổng Torii Fushimi Inari 🦊",
         location: "Fushimi-ku, Kyoto",
         description: "Hơn 10,000 cổng Torii sơn màu đỏ chu sa son sắt xếp liền nhau dẫn lên đỉnh núi thiêng thờ Thần Nông Nghiệp Inari."
       },
       {
-        url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&q=80",
+        url: "https://www.luavietours.com/wp/wp-content/uploads/2024/12/1-rung-tre-sagano-voi-khong-gian-day-yen-binh-va-tinh-lang-750x500.jpg",
         caption: "Rừng trúc Sagano Arashiyama xanh biếc 🎋",
         location: "Arashiyama, Ukyo-ku",
         description: "Lối mòn xuyên qua rừng tre cao vút xào xạc trong gió, một trong 100 âm thanh đặc trưng của nước Nhật."
@@ -269,7 +269,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         title: "Kimono Lụa Dệt Nishijin-ori Cố Đô",
         titleJa: "西陣織着物 (Nishijin-ori Kimono)",
         icon: "👘",
-        imageUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&q=80",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTZi9n1ABoAo7CukeicEYr3YxiaYhdRf0Eyfy4oysku67YMja7a4f2-mQU&s=10",
         desc: "Kỹ nghệ dệt gấm lụa tơ tằm xen chỉ vàng chỉ bạc phức tạp với hơn 1,200 năm lịch sử tại quận Nishijin.",
         significance: "Trang phục truyền thống quý tộc, quốc phục biểu trưng cho phẩm hạnh và vẻ đẹp thanh nhã của phụ nữ Nhật."
       },
@@ -277,7 +277,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         title: "Chổi Đánh Trà Chasen & Bát Trà Chawan",
         titleJa: "茶筅と茶碗 (Chasen & Chawan)",
         icon: "🍵",
-        imageUrl: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=600&q=80",
+        imageUrl: "https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcQ4b2xy1bVAvG6-Mj-x_Q_KuyiC2Ba5LLUDKjB3X7dgcEsucKAi9BoDt9oD8qz-u3dwxHftdzfqWWwp88c",
         desc: "Chiếc chổi đánh trà chẻ từ một ống tre duy nhất thành cả trăm sợi mảnh như tơ cùng bát gốm Raku nung mộc mạc.",
         significance: "Bảo vật của Trà đạo thể hiện triết lý 'Nhất kỳ nhất hội' (Ichigo Ichie) — trân trọng từng khoảnh khắc gặp gỡ trong đời."
       },
@@ -285,7 +285,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         title: "Chuông Gió Furin Chùa Thiền Buổi Hạ",
         titleJa: "風鈴 (Furin - Chuông gió)",
         icon: "🎐",
-        imageUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&q=80",
+        imageUrl: "https://bizweb.dktcdn.net/thumb/1024x1024/100/362/023/files/camnhi-214928084952-chuong-gio-nhat-ban-2.jpg?v=1706082613250",
         desc: "Chiếc chuông gió thủy tinh treo dưới mái hiên chùa kèm dải giấy cầu nguyện rung rinh khi có ngọn gió hạ thổi qua.",
         significance: "Âm thanh thanh lương mang lại cảm giác mát mẻ xua tan oi bức mùa hè và gột rửa tâm hồn thanh tịnh."
       }
@@ -304,7 +304,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
 
   nara: {
     landmark3D: "🦌",
-    landmarkImage: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=800&q=80",
+    landmarkImage: "https://encrypted-tbn3.gstatic.com/licensed-image?q=tbn:ANd9GcQ7cnDkzD5-VevAMnD0397K8CrIcTz6GEoS2WD1Q36w7tCa2i5iEbE7v8SwHQe85gtrO-cW1XxRdu2es-c",
     highlights: ["Đại Phật Daibutsu chùa Todai-ji", "Đàn hươu thiêng công viên Nara", "Đền thờ ngàn đèn lồng Kasuga Taisha"],
     history: {
       eraName: "Thời kỳ Bình Thành Heijo-kyo (710 – 784) & Cái Nôi Phật Giáo Nhật Bản",
@@ -344,7 +344,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         nameJa: "柿の葉寿司",
         desc: "Món sushi cá hồi hoặc cá thu ngâm giấm bọc trong lá hồng tươi vùng Yoshino, ép chặt trong hộp gỗ qua đêm cho lên men dịu nhẹ.",
         icon: "🍣",
-        imageUrl: "https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=700&q=80",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPUvQlssMCqPAXwEuHSNBhjRShh8B4gMIQCq-Eyi0LFbAklQZJienDO7bi&s=10",
         taste: "Thịt cá đậm đà ngậy béo, hạt cơm dẻo quyện hương thơm thanh khiết chống khuẩn đặc trưng của lá hồng.",
         orderingPhrase: "柿の葉寿司の詰め合わせをください (Kakinohazushi no tsumeawase o kudasai - Cho tôi hộp thập cẩm sushi lá hồng)"
       },
@@ -353,7 +353,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         nameJa: "三輪素麺",
         desc: "Sợi mì somen mỏng manh như sợi tơ làm thủ công suốt 1,200 năm dưới chân núi thiêng Miwa, ủ qua mùa đông rồi luộc chín ướp đá lạnh.",
         icon: "🍜",
-        imageUrl: "https://images.unsplash.com/photo-1591814468924-caf88d1232e1?w=700&q=80",
+        imageUrl: "https://nippontravel.vn/wp-content/uploads/2026/05/somen-1-600x600.webp",
         taste: "Sợi mì dai giòn trơn lướt mát lạnh, chấm nước tương dashi thơm nồng gừng tươi và hành lá mùa hè.",
         orderingPhrase: "冷やし三輪素麺をお願いします (Hiyashi Miwa somen o onegaishimasu - Cho tôi miến lạnh Miwa ướp đá)"
       },
@@ -362,7 +362,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         nameJa: "中谷堂よもぎ餅",
         desc: "Bánh mochi lá ngải cứu tươi được các nghệ nhân giã siêu tốc với tốc độ mắt thường khó thấy, lăn qua bột đậu nành rang Kinako thơm lừng.",
         icon: "🍡",
-        imageUrl: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=700&q=80",
+        imageUrl: "https://kilala.vn/data/uploads/2023/171120231359-1700204385-yomogi-mochi.jpg",
         taste: "Lớp vỏ nếp ấm mềm dẻo dai dậy mùi thơm thảo mộc ngải cứu, bọc trọn nhân đậu đỏ ngọt lịm tan chảy.",
         orderingPhrase: "出来立てのよmogi餅を二つ (Dekitate no yomogimochi o futatsu - Cho tôi 2 cái mochi ngải cứu mới giã)"
       },
@@ -371,7 +371,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         nameJa: "大和茶粥",
         desc: "Cháo gạo nếp nấu cùng nước trà rang Hojicha mộc mạc thanh tịnh, món điểm tâm truyền thống của các thiền viện Nara suốt hơn 1,000 năm.",
         icon: "🥣",
-        imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700&q=80",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKCG9ie2P90S1KwIHCA8x4Cw-vpR3uA6xqwKhNW7Dobzy8aJgfF3HXvUQ&s=10",
         taste: "Vị bùi bùi nhẹ bụng, thoang thoảng hương thơm khói trà rang ăn kèm mận muối Umeboshi chua thanh kích thích tiêu hóa.",
         orderingPhrase: "朝の茶粥定食をください (Asa no chagayu teishoku o kudasai - Cho tôi set cháo trà buổi sáng)"
       }
@@ -380,19 +380,19 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
     stampJa: "奈良駅・記念印",
     scenicPhotos: [
       {
-        url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=800&q=80",
+        url: "https://nippontravel.vn/wp-content/uploads/2024/03/todaiji-temple-1.webp",
         caption: "Chính điện Daibutsuden chùa Todai-ji vĩ đại 🏯",
         location: "Zoshicho, Nara",
         description: "Tòa kiến trúc bằng gỗ lớn nhất thế giới, nơi che chở cho pho tượng Đại Phật đồng đen uy nghi ngàn năm."
       },
       {
-        url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800&q=80",
+        url: "https://dulichminhanh.com.vn/wp-content/uploads/2024/05/cong-vien-nai-nara-nhat-ban-4.jpg",
         caption: "Đàn hươu thiêng thong dong dưới bóng phong 🦌",
         location: "Công viên Nara Park",
         description: "Những sứ giả thần linh hoang dã tự do tản bộ giữa thảm cỏ xanh và tiếp xúc thân thiện với du khách."
       },
       {
-        url: "https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=800&q=80",
+        url: "https://nippontravel.vn/wp-content/uploads/2024/08/Kasuga-Taisha-Shrine-10.webp",
         caption: "Đền Kasuga Taisha với 3,000 đèn lồng đồng 🏮",
         location: "Kasuganocho, Nara",
         description: "Hàng ngàn chiếc đèn lồng treo dọc hành lang đỏ thắm, thắp sáng lung linh trong lễ hội Mantoro thần bí."
@@ -409,7 +409,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         title: "Đèn Lồng Đồng Thần Đạo Kasuga",
         titleJa: "春日大社釣燈籠 (Kasuga Tsuri-dōrō)",
         icon: "🏮",
-        imageUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&q=80",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIAPIRPhodEIY_m9cRHYfc4LHV26ihxQaSIMS1LX2lzeOKCXc_8CtHKjU&s=10",
         desc: "Hơn 3,000 chiếc đèn lồng bằng đá và đồng đúc chạm khắc hình hoa tử đằng và hươu rừng, do các tín đồ hiến tặng qua nhiều thế kỷ.",
         significance: "Ánh sáng xua đi u minh tăm tối, dẫn lối cho linh hồn và thần linh giáng thế ban phúc lành."
       },
@@ -417,7 +417,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         title: "Mực Nho Thủ Công Nara-sumi",
         titleJa: "奈良墨 (Nara-sumi)",
         icon: "🖌️",
-        imageUrl: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&q=80",
+        imageUrl: "https://suigenkyo.store/cdn/shop/products/153854986.jpg?v=1661670776&width=800",
         desc: "Thỏi mực đen bóng mài thủ công từ muội than dầu hạt cải và keo tự nhiên, sản xuất mực chiếm 90% sản lượng toàn quốc.",
         significance: "Linh hồn của nghệ thuật Thư đạo (Shodo), tạo nên những nét chữ có độ bóng sâu và trường tồn hàng thiên niên kỷ."
       },
@@ -425,7 +425,7 @@ export const CITY_DETAILS: Record<string, CityGourmet> = {
         title: "Bánh Quy Thảo Dược Cho Hươu Shika-senbei",
         titleJa: "鹿せんべい (Shika-senbei)",
         icon: "🍪",
-        imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80",
+        imageUrl: "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTmwmwMtm4KFY1PmDeCt3IyOu8a0IdCZSSsc3ANK4kzOZOFNvsJoMgczgQ4-Mp8",
         desc: "Bánh tròn nướng từ cám gạo và bột mì không đường, có dán tem giấy ăn được do Quỹ Bảo tồn Hươu Nara chứng nhận.",
         significance: "Cầu nối giao lưu thân thiện giữa con người và thiên nhiên hoang dã suốt hàng trăm năm qua."
       }

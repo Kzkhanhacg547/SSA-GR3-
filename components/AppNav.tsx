@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import { useSoundAndTheme } from "./SoundAndThemeContext";
+import { AudioControlWidget } from "./AudioControlWidget";
+import { NihonQuestLogo } from "./NihonQuestLogo";
 
 interface NavItem {
   href: string;
@@ -106,24 +108,10 @@ export function AppNav() {
     <>
       {/* Top Header Navigation */}
       <header className="sticky top-0 z-40 mb-6 w-full glass-panel border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-sumi-950/80 backdrop-blur-xl transition-colors shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
+        <div className="max-w-7xl mx-auto px-2 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-1.5 sm:gap-3">
           {/* Brand Logo */}
-          <Link
-            href="/app"
-            onClick={playClick}
-            className="flex items-center gap-2.5 shrink-0 font-black text-lg tracking-tight hover:opacity-90 transition group"
-          >
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sakura-600 via-rose-500 to-amber-500 flex items-center justify-center text-white shadow-md shadow-sakura-500/25 group-hover:scale-105 group-hover:rotate-3 transition-transform">
-              <span className="text-lg font-bold font-jp">日</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="leading-tight text-slate-900 dark:text-white font-black text-base tracking-tight">
-                Nihon Quest
-              </span>
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold tracking-wider uppercase">
-                Japanese Master
-              </span>
-            </div>
+          <Link href="/app" onClick={playClick}>
+            <NihonQuestLogo size="md" />
           </Link>
 
           {/* Desktop Navigation Bar (5 Core Tabs + Smart Explore Dropdown) */}
@@ -232,13 +220,14 @@ export function AppNav() {
             </div>
           </nav>
 
-          {/* Right Utility Actions (Sound, Dark Mode, Profile) */}
-          <div className="flex items-center gap-2 shrink-0">
+          {/* Right Utility Actions (Sound, Audio Settings, Dark Mode, Profile) */}
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+            <AudioControlWidget />
             {/* Audio Toggle */}
             <button
               onClick={toggleSound}
               aria-label={soundEnabled ? "Mute audio" : "Enable audio"}
-              className={`p-2.5 rounded-2xl text-sm transition-all border ${
+              className={`p-2 sm:p-2.5 rounded-2xl text-xs sm:text-sm transition-all border ${
                 soundEnabled
                   ? "bg-amber-50 border-amber-200 text-amber-600 dark:bg-amber-950/40 dark:border-amber-900 dark:text-amber-300 shadow-sm"
                   : "bg-slate-100 border-slate-200 text-slate-400 dark:bg-sumi-900 dark:border-slate-800 hover:bg-slate-200/70"
@@ -252,7 +241,7 @@ export function AppNav() {
             <button
               onClick={toggleTheme}
               aria-label="Toggle dark mode"
-              className="p-2.5 rounded-2xl text-sm border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:bg-sumi-900 dark:text-slate-200 dark:hover:bg-sumi-800 transition shadow-sm"
+              className="p-2 sm:p-2.5 rounded-2xl text-xs sm:text-sm border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:bg-sumi-900 dark:text-slate-200 dark:hover:bg-sumi-800 transition shadow-sm"
               title={theme === "dark" ? "Chuyển giao diện Sáng" : "Chuyển giao diện Tối"}
             >
               {theme === "dark" ? "🌙" : "☀️"}
@@ -262,7 +251,7 @@ export function AppNav() {
             <Link
               href="/app/profile"
               onClick={playClick}
-              className={`flex items-center justify-center w-10 h-10 rounded-2xl border text-sm font-black transition shadow-sm ${
+              className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-2xl border text-xs sm:text-sm font-black transition shadow-sm ${
                 pathname === "/app/profile"
                   ? "border-sakura-500 bg-sakura-50 text-sakura-600 dark:bg-sakura-950/50 dark:text-sakura-400"
                   : "border-slate-200 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:bg-sumi-900 dark:text-slate-200"

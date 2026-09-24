@@ -8,3 +8,11 @@ prisma/dev.db*
 !.env.example
 __listing.txt
 *.tsbuildinfo
+*.zip
+*.crdownload
+__pycache__/
+qrcode_*.png
+N3/
+N5/
+Kho*
+

@@ -3,8 +3,10 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Card, Button, Badge } from "@/components/ui";
 import { SenseiAvatar, type AvatarState } from "@/components/SenseiAvatar";
+import { SenseiDailyDungeon } from "@/components/SenseiDailyDungeon";
 import { N3_KAIWA_SCENARIOS, type KaiwaScenario } from "@/lib/n3KaiwaScenarios";
 import { useSoundAndTheme } from "@/components/SoundAndThemeContext";
+import { kanaToRomaji } from "@/lib/romajiConverter";
 
 interface Message {
   id: string;
@@ -16,7 +18,10 @@ interface Message {
 }
 
 export function SenseiKaiwaClient() {
-  const { playClick, playCorrect } = useSoundAndTheme();
+  const { playClick, playCorrect, speak: globalSpeak } = useSoundAndTheme();
+
+  // Main Tab State (Kaiwa vs Dungeon)
+  const [activeSenseiTab, setActiveSenseiTab] = useState<"KAIWA" | "DUNGEON">("KAIWA");
 
   // Selected scenario
   const [selectedScenario, setSelectedScenario] = useState<KaiwaScenario>(N3_KAIWA_SCENARIOS[0]);
@@ -40,6 +45,7 @@ export function SenseiKaiwaClient() {
   const [isListening, setIsListening] = useState(false);
   const [avatarState, setAvatarState] = useState<AvatarState>("IDLE");
   const [showFurigana, setShowFurigana] = useState(true);
+  const [showRomaji, setShowRomaji] = useState(true);
   const [showTranslations, setShowTranslations] = useState(true);
   const [autoVoice, setAutoVoice] = useState(true);
   const [apiKey, setApiKey] = useState("");
@@ -50,6 +56,7 @@ export function SenseiKaiwaClient() {
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const recognitionRef = useRef<any>(null);
+  const baseInputRef = useRef<string>("");
 
   // Load API Key & Model from localStorage
   useEffect(() => {
@@ -86,44 +93,27 @@ export function SenseiKaiwaClient() {
     scrollToBottom();
   }, [messages, loading]);
 
-  // TTS Speech Synthesis with Avatar Lip-Sync
+  // TTS Speech Synthesis with Avatar Lip-Sync using Global TTS
   const speakJapanese = useCallback(
     (text: string) => {
-      if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-
-      window.speechSynthesis.cancel();
+      if (!text) return;
 
       // Extract Japanese text
       const japaneseMatch = text.match(/[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF\u3000-\u303F]+/g);
       const cleanJp = japaneseMatch ? japaneseMatch.join(" ") : text;
 
-      const utterance = new SpeechSynthesisUtterance(cleanJp);
-      utterance.lang = "ja-JP";
-      utterance.rate = 0.88; // Natural, clear pedagogical pace
+      setIsSpeaking(true);
+      setAvatarState("TALKING");
 
-      // Find best Japanese voice if available
-      const voices = window.speechSynthesis.getVoices();
-      const jpVoice = voices.find((v) => v.lang.includes("ja") || v.lang.includes("JP"));
-      if (jpVoice) utterance.voice = jpVoice;
+      globalSpeak(cleanJp);
 
-      utterance.onstart = () => {
-        setIsSpeaking(true);
-        setAvatarState("TALKING");
-      };
-
-      utterance.onend = () => {
+      const estimatedMs = Math.max(1500, cleanJp.length * 200);
+      setTimeout(() => {
         setIsSpeaking(false);
         setAvatarState("IDLE");
-      };
-
-      utterance.onerror = () => {
-        setIsSpeaking(false);
-        setAvatarState("IDLE");
-      };
-
-      window.speechSynthesis.speak(utterance);
+      }, estimatedMs);
     },
-    []
+    [globalSpeak]
   );
 
   // Play initial scenario message speech on change if autoVoice is on
@@ -145,7 +135,7 @@ export function SenseiKaiwaClient() {
     }
   };
 
-  // Web Speech Recognition (Microphone STT)
+  // Web Speech Recognition (Microphone STT) - Accumulate speech without overwriting
   const toggleListening = () => {
     playClick();
 
@@ -166,10 +156,13 @@ export function SenseiKaiwaClient() {
       return;
     }
 
+    // Save current text in input as base so new speech appends rather than overwrites
+    baseInputRef.current = input.trim();
+
     try {
       const recognition = new SpeechRecognition();
       recognition.lang = "ja-JP";
-      recognition.continuous = false;
+      recognition.continuous = true; // Continuous listening across pauses
       recognition.interimResults = true;
 
       recognition.onstart = () => {
@@ -181,7 +174,10 @@ export function SenseiKaiwaClient() {
         const transcript = Array.from(event.results)
           .map((result: any) => result[0].transcript)
           .join("");
-        setInput(transcript);
+
+        const base = baseInputRef.current;
+        const combined = base ? `${base} ${transcript}` : transcript;
+        setInput(combined);
       };
 
       recognition.onerror = () => {
@@ -210,10 +206,16 @@ export function SenseiKaiwaClient() {
     setInput("");
     playClick();
 
+    const matched = selectedScenario.suggestedReplies.find(
+      (r) => r.ja.trim() === text.trim()
+    );
+
     const userMsg: Message = {
       id: `user_${Date.now()}`,
       role: "user",
       content: text,
+      furigana: matched?.furigana,
+      meaning: matched?.vi,
       createdAt: new Date().toISOString(),
     };
 
@@ -285,7 +287,38 @@ export function SenseiKaiwaClient() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
-      {/* Top Banner: Scenario Selector & AI Key Setup */}
+      {/* ── Main Feature Switcher ── */}
+      <div className="flex items-center gap-2 bg-white dark:bg-sumi-900 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm w-fit">
+        <button
+          type="button"
+          onClick={() => { playClick(); setActiveSenseiTab("KAIWA"); }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+            activeSenseiTab === "KAIWA"
+              ? "bg-sakura-500 text-white shadow-md shadow-sakura-500/20"
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-sumi-800"
+          }`}
+        >
+          💬 AI Kaiwa (Đàm Thoại)
+        </button>
+        <button
+          type="button"
+          onClick={() => { playClick(); setActiveSenseiTab("DUNGEON"); }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+            activeSenseiTab === "DUNGEON"
+              ? "bg-gradient-to-r from-amber-500 to-rose-500 text-white shadow-md shadow-amber-500/25"
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-sumi-800"
+          }`}
+        >
+          🏯 Sensei&apos;s Daily Dungeon
+          <span className="bg-amber-300 text-slate-950 text-[9px] font-black px-1.5 py-0.5 rounded-full">DAILY</span>
+        </button>
+      </div>
+
+      {activeSenseiTab === "DUNGEON" ? (
+        <SenseiDailyDungeon />
+      ) : (
+        <>
+          {/* Top Banner: Scenario Selector & AI Key Setup */}
       <div className="space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <span className="text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
@@ -381,6 +414,21 @@ export function SenseiKaiwaClient() {
                 title="Bật/Tắt Furigana"
               >
                 あ Furigana
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowRomaji(!showRomaji);
+                  playClick();
+                }}
+                className={`px-2.5 py-1 rounded-xl font-bold transition ${
+                  showRomaji
+                    ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200"
+                    : "text-slate-400"
+                }`}
+                title="Bật/Tắt Phiên âm Romaji"
+              >
+                🔤 Romaji
               </button>
 
               <button
@@ -483,8 +531,8 @@ export function SenseiKaiwaClient() {
                     }`}
                   >
                     {/* Furigana subtext if available */}
-                    {!isUser && showFurigana && msg.furigana && (
-                      <p className="text-[11px] text-slate-400 dark:text-slate-400 font-jp mb-1 font-medium">
+                    {showFurigana && msg.furigana && (
+                      <p className={`text-[11px] font-jp mb-1 font-medium ${isUser ? "text-rose-100" : "text-slate-400 dark:text-slate-400"}`}>
                         {msg.furigana}
                       </p>
                     )}
@@ -494,9 +542,16 @@ export function SenseiKaiwaClient() {
                       {msg.content}
                     </p>
 
+                    {/* Romaji phonetic subtext if enabled */}
+                    {showRomaji && (
+                      <p className={`text-xs font-mono italic mt-1 leading-relaxed ${isUser ? "text-rose-100" : "text-emerald-600 dark:text-emerald-400"}`}>
+                        🔤 {kanaToRomaji(msg.furigana || msg.content)}
+                      </p>
+                    )}
+
                     {/* Meaning translation subtext if available */}
-                    {!isUser && showTranslations && msg.meaning && (
-                      <p className="text-xs text-slate-600 dark:text-slate-300 mt-2 pt-2 border-t border-slate-200/50 dark:border-slate-700/50 italic leading-relaxed">
+                    {showTranslations && msg.meaning && (
+                      <p className={`text-xs mt-2 pt-2 border-t italic leading-relaxed ${isUser ? "text-rose-100 border-white/20" : "text-slate-600 dark:text-slate-300 border-slate-200/50 dark:border-slate-700/50"}`}>
                         🇻🇳 {msg.meaning}
                       </p>
                     )}
@@ -722,6 +777,8 @@ export function SenseiKaiwaClient() {
             </div>
           </div>
         </div>
+      )}
+        </>
       )}
     </div>
   );

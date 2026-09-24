@@ -44,6 +44,19 @@ async function main() {
 
   // Combine Lessons (N5 + N4 + N3)
   const ALL_LESSONS = [...LESSONS_N5, ...LESSONS_N4, ...LESSONS_N3];
+  const validLessonSlugs = ALL_LESSONS.map((l) => l.slug);
+  const obsoleteLessons = await prisma.lesson.findMany({
+    where: { slug: { notIn: validLessonSlugs } },
+    select: { id: true },
+  });
+  if (obsoleteLessons.length > 0) {
+    const obsoleteIds = obsoleteLessons.map((l) => l.id);
+    await prisma.exercise.deleteMany({ where: { lessonId: { in: obsoleteIds } } });
+    await prisma.userLessonProgress.deleteMany({ where: { lessonId: { in: obsoleteIds } } });
+    await prisma.lessonItem.deleteMany({ where: { lessonId: { in: obsoleteIds } } });
+    await prisma.lesson.deleteMany({ where: { id: { in: obsoleteIds } } });
+  }
+
   for (const l of ALL_LESSONS) {
     const lesson = await prisma.lesson.upsert({
       where: { slug: l.slug },
@@ -148,6 +161,7 @@ async function main() {
         meaning: v.meaning,
         partOfSpeech: v.partOfSpeech,
         jlptLevel: v.jlptLevel,
+        tags: v.tags ?? "",
         examples: {
           create: [{
             japanese: v.exampleJapanese,

@@ -27,20 +27,13 @@ const QUICK_PROMPTS = [
 
 function MessageBubble({ msg }: { msg: AiMsg }) {
   const isUser = msg.role === "user";
-  const { playClick } = useSoundAndTheme();
+  const { playClick, speak: globalSpeak } = useSoundAndTheme();
 
   const speak = (text: string) => {
-    // Extract Japanese text patterns
     const japaneseMatch = text.match(/[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]+/g);
     const jpText = japaneseMatch?.join("") || text;
-    if ("speechSynthesis" in window && jpText) {
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(jpText);
-      u.lang = "ja-JP";
-      u.rate = 0.85;
-      window.speechSynthesis.speak(u);
-      playClick();
-    }
+    globalSpeak(jpText);
+    playClick();
   };
 
   // Convert markdown to basic HTML-like rendering

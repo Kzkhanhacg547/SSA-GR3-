@@ -27,17 +27,7 @@ interface GrammarClientProps {
 }
 
 function GrammarCard({ item, isOpen, onToggle }: { item: GrammarItem; isOpen: boolean; onToggle: () => void }) {
-  const { playClick } = useSoundAndTheme();
-
-  const speak = (text: string) => {
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = "ja-JP";
-      u.rate = 0.85;
-      window.speechSynthesis.speak(u);
-    }
-  };
+  const { playClick, speak } = useSoundAndTheme();
 
   return (
     <Card

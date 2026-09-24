@@ -1,22 +1,15 @@
 import Link from "next/link";
 import { Button, Card, Badge } from "@/components/ui";
+import { NihonQuestLogo } from "@/components/NihonQuestLogo";
 
 export default function Home() {
   return (
     <div className="space-y-16 py-6 sm:py-10 max-w-6xl mx-auto">
       {/* Top Navbar Brand */}
       <header className="flex items-center justify-between pb-2">
-        <div className="flex items-center gap-3 font-black text-xl tracking-tight">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sakura-600 via-rose-500 to-amber-500 flex items-center justify-center text-white shadow-md shadow-sakura-500/30">
-            <span className="text-lg font-bold font-jp">日</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="leading-tight text-slate-900 dark:text-white font-black flex items-center gap-1.5 text-lg">
-              Nihon Quest <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sakura-100 dark:bg-sakura-950 text-sakura-600 dark:text-sakura-300">Quest</span>
-            </span>
-            <span className="text-[10px] text-slate-500 font-bold tracking-wider uppercase">Learn Japanese · Explore Japan</span>
-          </div>
-        </div>
+        <Link href="/">
+          <NihonQuestLogo size="md" />
+        </Link>
 
         <div className="flex items-center gap-3">
           <Link href="/login">

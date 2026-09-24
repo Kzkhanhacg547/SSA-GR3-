@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { NihonQuestLogo } from "@/components/NihonQuestLogo";
 
 function PasswordStrength({ password }: { password: string }) {
   const score = [
@@ -51,7 +52,6 @@ export default function ForgotPasswordPage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [devCode, setDevCode] = useState<string | null>(null);
   const [resendCooldown, setResendCooldown] = useState(0);
 
   // Timer cooldown
@@ -85,10 +85,6 @@ export default function ForgotPasswordPage() {
         return;
       }
 
-      if (data.devCode) {
-        setDevCode(data.devCode);
-        setOtpCode(data.devCode);
-      }
       setStep(2);
       setResendCooldown(60);
     } catch {
@@ -116,10 +112,7 @@ export default function ForgotPasswordPage() {
       if (!res.ok) {
         setError(data.error || "Không thể gửi lại mã.");
       } else {
-        if (data.devCode) {
-          setDevCode(data.devCode);
-          setOtpCode(data.devCode);
-        }
+        setOtpCode("");
         setResendCooldown(60);
       }
     } catch {
@@ -176,12 +169,12 @@ export default function ForgotPasswordPage() {
 
       <div className="w-full max-w-md relative z-10">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-fuji-500 to-sakura-500 shadow-xl shadow-fuji-500/40 mb-3">
-            <span className="text-xl font-black text-white">🔑</span>
-          </div>
-          <h1 className="text-2xl font-black text-slate-900 dark:text-white">Khôi Phục Mật Khẩu</h1>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
+        <div className="text-center mb-8 flex flex-col items-center">
+          <Link href="/" className="inline-block mb-3 hover:scale-105 transition-transform">
+            <NihonQuestLogo size="lg" />
+          </Link>
+          <h1 className="text-2xl font-black text-slate-900 dark:text-white mt-1">Khôi Phục Mật Khẩu</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-xs mt-1">
             {step === 1 && "Nhập email của bạn để nhận mã xác thực OTP đặt lại mật khẩu"}
             {step === 2 && `Nhập mã OTP và mật khẩu mới cho ${email}`}
             {step === 3 && "Mật khẩu của bạn đã được cập nhật thành công"}
@@ -189,14 +182,6 @@ export default function ForgotPasswordPage() {
         </div>
 
         <div className="bg-white/90 dark:bg-sumi-950/90 backdrop-blur-xl rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-2xl p-8 space-y-6">
-          {devCode && step === 2 && (
-            <div className="rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 p-3.5 text-xs text-amber-800 dark:text-amber-200">
-              <span className="font-bold">🧪 Dev Mode Simulator:</span> Mã OTP là{" "}
-              <code className="px-2 py-0.5 rounded bg-amber-200 dark:bg-amber-900 font-mono font-black text-sm text-amber-950 dark:text-amber-100">
-                {devCode}
-              </code>
-            </div>
-          )}
 
           {step === 1 && (
             <form onSubmit={handleRequestOtp} className="space-y-4">

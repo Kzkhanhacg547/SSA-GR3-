@@ -52,13 +52,17 @@ export async function requestOtp(email: string, type: OtpType): Promise<{ succes
   });
 
   return {
-    success: true,
-    devCode: mailRes.devPreview ? code : undefined,
+    success: mailRes.success,
+    error: mailRes.error,
+    devCode: (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test" || mailRes.devPreview) ? code : undefined,
   };
 }
 
-export async function verifyAndConsumeOtp(email: string, type: OtpType, code: string): Promise<{ valid: boolean; error?: string }> {
-  const normalizedEmail = email.trim().toLowerCase();
+export async function verifyAndConsumeOtp(email: string, type: OtpType, code?: string): Promise<{ valid: boolean; error?: string }> {
+  if (!code || typeof code !== "string") {
+    return { valid: false, error: "Mã xác thực OTP không đúng hoặc đã hết hạn." };
+  }
+  const normalizedEmail = (email || "").trim().toLowerCase();
   const identifier = getIdentifier(type, normalizedEmail);
   const cleanCode = code.trim();
 

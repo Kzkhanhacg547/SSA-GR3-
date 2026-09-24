@@ -514,7 +514,7 @@ const REAL_SCENARIOS: ScenarioDef[] = [
 
 export function SurvivalClient({ scenarios }: { scenarios: Array<{ id: string; slug: string; title: string; isCompleted: boolean }> }) {
   const router = useRouter();
-  const { playClick, playCorrect, playIncorrect, playFanfare, showToast } = useSoundAndTheme();
+  const { playClick, playCorrect, playIncorrect, playFanfare, showToast, speak } = useSoundAndTheme();
 
   const [activeScenario, setActiveScenario] = useState<ScenarioDef | null>(null);
   const [showHints, setShowHints] = useState(false);
@@ -560,18 +560,6 @@ export function SurvivalClient({ scenarios }: { scenarios: Array<{ id: string; s
       }
     }
   }, []);
-
-  const speak = (text: string) => {
-    try {
-      if ("speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = "ja-JP";
-        u.rate = 0.85;
-        window.speechSynthesis.speak(u);
-      }
-    } catch {}
-  };
 
   const startScenario = (scDef: ScenarioDef) => {
     playClick();

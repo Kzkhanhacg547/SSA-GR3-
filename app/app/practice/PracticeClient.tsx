@@ -4,6 +4,12 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import { Card, Button, Badge } from "@/components/ui";
 import { useSoundAndTheme } from "@/components/SoundAndThemeContext";
+import { KanaBattleCard } from "@/components/KanaBattleCard";
+
+export function cleanLessonTitle(title: string): string {
+  if (!title) return "";
+  return title.replace(/^(Minna\s+)?Bài\s*\d+(\s*\([^\)]+\))?:\s*/i, "").trim();
+}
 
 export interface UnitInfo {
   number: number;
@@ -27,6 +33,8 @@ export interface PracticeLessonItem {
   score?: number | null;
 }
 
+type MainTab = "LESSONS" | "BATTLE";
+
 export function PracticeClient({
   lessons,
   units,
@@ -36,6 +44,7 @@ export function PracticeClient({
   units: UnitInfo[];
   userLevel: string;
 }) {
+  const [mainTab, setMainTab] = useState<MainTab>("LESSONS");
   const [selectedUnit, setSelectedUnit] = useState<number | "ALL">(1);
   const [statusFilter, setStatusFilter] = useState<"ALL" | "COMPLETED" | "UNFINISHED">("ALL");
   const [query, setQuery] = useState("");
@@ -77,8 +86,47 @@ export function PracticeClient({
 
   return (
     <div className="space-y-6">
-      {/* Unit Selector Bar (Tabs / Pills) */}
-      <div className="bg-white dark:bg-sumi-900 p-2 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      {/* ── Main Tab Switcher ── */}
+      <div className="flex items-center gap-2 bg-white dark:bg-sumi-900 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm w-fit">
+        <button
+          type="button"
+          id="practice-tab-lessons"
+          onClick={() => { playClick(); setMainTab("LESSONS"); }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+            mainTab === "LESSONS"
+              ? "bg-sakura-500 text-white shadow-md shadow-sakura-500/20"
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-sumi-800"
+          }`}
+        >
+          📚 Bài Học
+        </button>
+        <button
+          type="button"
+          id="practice-tab-battle"
+          onClick={() => { playClick(); setMainTab("BATTLE"); }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+            mainTab === "BATTLE"
+              ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-500/25"
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-sumi-800"
+          }`}
+        >
+          🃏 Kana Battle
+          <span className="bg-amber-400 text-slate-900 text-[9px] font-black px-1.5 py-0.5 rounded-full">NEW</span>
+        </button>
+      </div>
+
+      {/* ── Kana Battle Game ── */}
+      {mainTab === "BATTLE" && (
+        <div className="rounded-3xl bg-gradient-to-br from-violet-950/80 via-indigo-950/60 to-slate-900/80 border border-violet-700/20 shadow-xl overflow-hidden p-4">
+          <KanaBattleCard />
+        </div>
+      )}
+
+      {/* ── Lessons browser (hidden when on BATTLE tab) ── */}
+      {mainTab === "LESSONS" && (
+        <>
+          {/* Unit Selector Bar (Tabs / Pills) */}
+          <div className="bg-white dark:bg-sumi-900 p-2 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
           <button
             type="button"
@@ -240,7 +288,7 @@ export function PracticeClient({
                   </div>
 
                   <h4 className="text-base font-black text-slate-900 dark:text-white tracking-tight leading-snug">
-                    {l.title}
+                    {cleanLessonTitle(l.title)}
                   </h4>
                   <p className="mt-1 text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
                     {l.description}
@@ -277,6 +325,8 @@ export function PracticeClient({
           })}
         </div>
       )}
-    </div>
+    </>
+  )}
+</div>
   );
 }

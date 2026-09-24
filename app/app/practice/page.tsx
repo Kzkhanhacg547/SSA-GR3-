@@ -7,27 +7,36 @@ import { PageTitle, Button } from "@/components/ui";
 import { PracticeClient, type UnitInfo, type PracticeLessonItem } from "./PracticeClient";
 import Link from "next/link";
 
+function cleanLessonTitle(title: string): string {
+  if (!title) return "";
+  return title.replace(/^(Minna\s+)?Bài\s*\d+(\s*\([^\)]+\))?:\s*/i, "").trim();
+}
+
 export const metadata = {
   title: "Khóa Học & Luyện Tập JLPT — Nihon Quest",
 };
 
 const UNITS_BY_LEVEL: Record<string, UnitInfo[]> = {
   N5: [
-    { number: 1, title: "Unit 01: Nhập Môn & Chào Hỏi", description: "Bảng chữ cái Kana, câu chào hỏi hàng ngày, số đếm và giới thiệu bản thân", icon: "🌱", startIndex: 0, endIndex: 5 },
-    { number: 2, title: "Unit 02: Cuộc Sống Thường Ngày", description: "Thời gian, đồ vật quanh ta, nhà ở, ẩm thực và các hoạt động thường nhật", icon: "🍱", startIndex: 5, endIndex: 10 },
-    { number: 3, title: "Unit 03: Mua Sắm & Ẩm Thực", description: "Hỏi giá, mua sắm tại cửa hàng tiện lợi Konbini, gọi món tại quán ăn Nhật Bản", icon: "🏪", startIndex: 10, endIndex: 15 },
-    { number: 4, title: "Unit 04: Giao Thông & Du Lịch", description: "Hỏi đường tại đại nhà ga, phương tiện đi lại, lữ quán Ryokan và bốn mùa Nhật Bản", icon: "🚅", startIndex: 15, endIndex: 20 },
-    { number: 5, title: "Unit 05: Giao Tiếp Nâng Cao", description: "Bày tỏ cảm xúc, rủ rê hẹn gặp, thể Te và các cấu trúc ngữ pháp N5 thực chiến", icon: "🏯", startIndex: 20, endIndex: 30 },
+    { number: 1, title: "Unit 01: Nhập Môn, Kana & Chào Hỏi", description: "Bảng chữ cái Hiragana, Katakana, biến âm, ảo âm, văn hóa chào hỏi & làm quen giao tiếp", icon: "🌱", startIndex: 0, endIndex: 10 },
+    { number: 2, title: "Unit 02: Đồ Vật, Nơi Chốn & Hoạt Động", description: "Chỉ thị từ Kore/Sore/Are, địa điểm, thời gian, động từ di chuyển & các cặp tính từ sơ cấp", icon: "🍱", startIndex: 10, endIndex: 20 },
+    { number: 3, title: "Unit 03: Tồn Tại, So Sánh & Thể Te", description: "Tồn tại Arimasu/Imasu, số đếm, so sánh hơn nhất, nguyện vọng & bí quyết chia Thể Te", icon: "🏪", startIndex: 20, endIndex: 30 },
+    { number: 4, title: "Unit 04: Thể Nai, Ta, Thể Thường & Định Ngữ", description: "Mẫu câu cấm đoán, bắt buộc làm, thể từ điển, kinh nghiệm từng trải & mệnh đề bổ ngữ danh từ", icon: "⛩️", startIndex: 30, endIndex: 40 },
+    { number: 5, title: "Unit 05: Kanji Master & Mock Test JLPT N5", description: "100+ Kanji cốt lõi, 10 trợ từ then chốt, phản xạ 5 thể động từ, đọc hiểu & đề thi thử toàn diện", icon: "🏆", startIndex: 40, endIndex: 50 },
   ],
   N4: [
-    { number: 1, title: "Unit 01: Biến Thể Động Từ", description: "Thể てしまう, やすい/にくい, すぎる và các biến thể động từ sơ trung cấp", icon: "🗂️", startIndex: 0, endIndex: 2 },
-    { number: 2, title: "Unit 02: Câu Điều Kiện", description: "Bốn dạng câu giả định: ば, たら, なら, と — phân biệt và sử dụng đúng ngữ cảnh", icon: "🔄", startIndex: 2, endIndex: 4 },
-    { number: 3, title: "Unit 03: Bị Động & Sai Khiến", description: "Thể Bị động (受身), Thể Sai khiến và Mẫu câu xin phép nơi công sở", icon: "🏢", startIndex: 4, endIndex: 6 },
+    { number: 1, title: "Unit 01: Biến Thể Động Từ & Thể Trạng Thái", description: "Thể てしまう, やすい/にくい, すぎる và các biến thể động từ sơ trung cấp", icon: "🗂️", startIndex: 0, endIndex: 5 },
+    { number: 2, title: "Unit 02: Câu Điều Kiện & Giả Định", description: "Bốn dạng câu giả định: ば, たら, なら, と — phân biệt và sử dụng đúng ngữ cảnh", icon: "🔄", startIndex: 5, endIndex: 10 },
+    { number: 3, title: "Unit 03: Bị Động, Sai Khiến & Xin Phép", description: "Thể Bị động (受身), Thể Sai khiến và Mẫu câu xin phép nơi công sở", icon: "🏢", startIndex: 10, endIndex: 15 },
+    { number: 4, title: "Unit 04: Cho Nhận & Diễn Đạt Ý Định", description: "Mẫu câu cho nhận あげる/もらう/くれる, khuyên nhủ ほうがいい và suy đoán", icon: "🎁", startIndex: 15, endIndex: 20 },
+    { number: 5, title: "Unit 05: Kanji N4 & Đề Thi Thử JLPT N4", description: "Kanji sơ trung cấp, tổng hợp ngữ pháp N4, đọc hiểu & đề thi thử JLPT N4 toàn diện", icon: "🏅", startIndex: 20, endIndex: 25 },
   ],
   N3: [
-    { number: 1, title: "Unit 01: Giao Tiếp Công Sở", description: "Văn hóa Horenso, báo cáo tiến độ và sử dụng に関して trong môi trường công việc", icon: "💼", startIndex: 0, endIndex: 1 },
-    { number: 2, title: "Unit 02: Diễn Đạt Sắc Thái", description: "わけがない, に違いない và các cấu trúc diễn đạt sự chắc chắn, phủ định mạnh", icon: "🎯", startIndex: 1, endIndex: 2 },
-    { number: 3, title: "Unit 03: Thời Điểm & Thời Gian", description: "たとたん, うちに — nắm bắt khoảnh khắc và sử dụng đúng thời điểm", icon: "⏳", startIndex: 2, endIndex: 4 },
+    { number: 1, title: "Unit 01: Giao Tiếp Công Sở & Khẳng Định Logic", description: "Văn hóa Horenso công sở, に関して, わけがない, に違いない và khẳng định chắc chắn", icon: "💼", startIndex: 0, endIndex: 5 },
+    { number: 2, title: "Unit 02: Thời Điểm, Nguyên Nhân & Mức Độ", description: "たとたん, うちに, おかげで, せいで, に比べて và diễn đạt mức độ so sánh", icon: "⏳", startIndex: 5, endIndex: 10 },
+    { number: 3, title: "Unit 03: Phủ Định, Trạng Thái & Kính Ngữ N3", description: "わけではない, つつある, っぱなし, thụ động sai khiến và kính ngữ giao tiếp N3", icon: "🎯", startIndex: 10, endIndex: 15 },
+    { number: 4, title: "Unit 04: Kanji Master N3 (Xã Hội & Công Việc)", description: "Bộ Kanji N3 cốt lõi về chính trị, kinh tế, công sở, kỹ thuật và đăng ký", icon: "🈁", startIndex: 15, endIndex: 20 },
+    { number: 5, title: "Unit 05: Từ Vựng, Đọc Hiểu & Đề Thi Thử N3", description: "Động từ N3 tần suất cao, tính từ, đọc hiểu email công việc & đề thi thử JLPT N3", icon: "🏆", startIndex: 20, endIndex: 25 },
   ],
 };
 
@@ -106,7 +115,7 @@ export default async function PracticePage() {
                 BÀI HỌC TIẾP THEO
               </span>
               <p className="font-black text-xs sm:text-sm text-white mt-0.5 truncate max-w-[220px]">
-                {nextLesson.title}
+                {cleanLessonTitle(nextLesson.title)}
               </p>
               <Link href={`/app/practice/${nextLesson.slug}`} className="block mt-2.5">
                 <Button variant="gold" size="sm" className="w-full justify-center font-black text-xs">
